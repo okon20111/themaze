@@ -229,9 +229,9 @@
         <div class="relative">
             <div class="absolute inset-0 bg-cyan-500/20 blur-3xl rounded-full opacity-20"></div>
             <h1 class="title-glitch text-5xl md:text-8xl font-black mb-2 tracking-tighter relative z-10">THE MAZE</h1>
-            <div class="flex items-center justify-center gap-4 mt-4 opacity-60">
+            <div class="flex items-center justify-center gap-4 mt-4 opacity-80">
                 <div class="h-[1px] w-12 bg-gradient-to-r from-transparent to-cyan-500"></div>
-                <p class="text-cyan-400 text-[10px] tracking-[0.8em] uppercase font-bold">Immersion Ready</p>
+                <p class="text-cyan-400 text-[10px] tracking-[0.6em] uppercase font-bold text-shadow-glow">WERSJA 1.1 JUŻ DOSTĘPNA</p>
                 <div class="h-[1px] w-12 bg-gradient-to-l from-transparent to-cyan-500"></div>
             </div>
         </div>
@@ -287,8 +287,8 @@
                 <div class="flex items-center gap-4">
                     <i data-lucide="file-archive" class="w-8 h-8 text-gray-400"></i>
                     <div class="text-left">
-                        <div class="text-white font-bold text-lg tracking-wide">themaze.zip</div>
-                        <div class="text-xs text-gray-500 mt-0.5">Wersja 1.0.4 stable</div>
+                        <div class="text-white font-bold text-lg tracking-wide">themaze_v1.1.zip</div>
+                        <div class="text-xs text-gray-500 mt-0.5">Wersja 1.1 stable</div>
                     </div>
                 </div>
                 <div class="text-right">
@@ -410,8 +410,8 @@
 
                 // Trigger file download
                 const link = document.createElement('a');
-                link.href = 'themaze.zip';
-                link.download = 'themaze.zip';
+                link.href = 'themaze_v1.1.zip';
+                link.download = 'themaze_v1.1.zip';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
