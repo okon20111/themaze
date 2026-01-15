@@ -3,169 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Maze - Official Download</title>
+    <title>The Maze - Vivid Spring Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #bc13fe;
-            --dark-bg: #030304;
+            /* ŻYWE KOLORY */
+            --vivid-green: #00ff9d; /* Neon Mint */
+            --hot-pink: #ff007f;    /* Magenta */
+            --bright-yellow: #ffea00; 
+            --deep-purple: #240b36;
+            --forest-teal: #0f3d3e;
         }
 
         body {
-            background-color: var(--dark-bg);
+            background-color: #000;
+            /* Gradient: Głęboki Fiolet -> Morski -> Ciemny Las */
+            background: radial-gradient(circle at 50% 30%, #2e1a47 0%, #0f3d3e 60%, #020b06 100%);
             font-family: 'Space Mono', monospace;
             overflow: hidden;
             color: white;
-            cursor: default; /* Zmieniamy kursor na domyślny, bo mamy spotlight */
+            cursor: default;
         }
 
-        /* --- SPOTLIGHT CURSOR --- */
+        /* --- FIREFLY CURSOR --- */
         #cursor-glow {
             position: fixed;
             top: 0; left: 0;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.07) 0%, transparent 60%);
+            width: 400px;
+            height: 400px;
+            /* Cieplejszy, złoty blask */
+            background: radial-gradient(circle, rgba(255, 234, 0, 0.25) 0%, transparent 70%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 5;
+            mix-blend-mode: screen;
             transition: opacity 0.3s;
         }
 
-        /* --- TYTUŁ --- */
-        .title-glitch {
+        /* --- TYTUŁ (WIELOKOLOROWY) --- */
+        .title-vivid {
             font-family: 'Syncopate', sans-serif;
+            font-weight: 900;
             text-transform: uppercase;
             position: relative;
-            color: white;
-            text-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
-            letter-spacing: 0.25em;
-            animation: float-title 7s ease-in-out infinite;
+            /* Gradient tekstu */
+            background: linear-gradient(to bottom, #fff 40%, var(--vivid-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.5));
+            letter-spacing: 0.2em;
+            animation: pulse-title 4s ease-in-out infinite;
         }
 
-        @keyframes float-title {
-            0%, 100% { transform: translateY(0); text-shadow: 0 0 25px rgba(0, 243, 255, 0.4); opacity: 0.9; }
-            50% { transform: translateY(-10px); text-shadow: 0 0 60px rgba(0, 243, 255, 0.8); opacity: 1; }
+        @keyframes pulse-title {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.4)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 30px rgba(255, 0, 127, 0.6)); transform: scale(1.02); }
         }
 
-        /* --- PRZYCISK PIGUŁKA (PERFEKCYJNY) --- */
+        /* --- PRZYCISK (NEON NATURE) --- */
         .btn-wrapper {
             position: relative;
-            z-index: 20; /* Wyżej niż spotlight */
+            z-index: 20;
         }
 
         .btn-glow-ring {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             border-radius: 9999px;
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            z-index: -1;
+            background: linear-gradient(45deg, var(--vivid-green), var(--hot-pink), var(--bright-yellow));
+            filter: blur(20px);
             opacity: 0.5;
-            animation: breathe 4s infinite ease-in-out;
+            animation: spin-glow 8s linear infinite;
+            z-index: -1;
         }
-
-        @keyframes breathe {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.6; }
+        
+        @keyframes spin-glow {
+            0% { transform: translate(-50%, -50%) rotate(0deg); filter: blur(20px); }
+            50% { filter: blur(30px); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) rotate(360deg); filter: blur(20px); }
         }
 
         .main-btn {
             position: relative;
-            background: rgba(15, 15, 20, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Delikatniejszy border */
+            background: rgba(20, 20, 30, 0.6); /* Ciemniejsze wnętrze dla kontrastu */
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 9999px;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            backdrop-filter: blur(12px);
-            padding: 22px 64px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Cień pod spodem */
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(15px);
+            padding: 24px 70px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
         
-        .main-btn::before {
+        .main-btn::after {
             content: '';
             position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transform: skewX(-20deg);
-            transition: 0s;
-        }
-
-        /* Hover States */
-        .btn-wrapper:hover .btn-glow-ring {
-            width: 110%;
-            height: 125%;
-            opacity: 1;
-            box-shadow: 0 0 80px rgba(0, 243, 255, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.2);
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, transparent 70%);
-            animation: none;
+            inset: 0;
+            border-radius: 9999px;
+            padding: 2px;
+            background: linear-gradient(90deg, var(--vivid-green), var(--hot-pink));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.7;
+            transition: opacity 0.3s;
         }
 
         .btn-wrapper:hover .main-btn {
-            border-color: rgba(0, 243, 255, 0.6);
-            transform: scale(1.02) translateY(-2px);
-            background: rgba(10, 15, 20, 0.9);
-            color: #fff;
-            text-shadow: 0 0 15px rgba(255,255,255,0.8);
-            box-shadow: 0 20px 40px rgba(0, 243, 255, 0.15);
+            background: rgba(40, 40, 50, 0.8);
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.4);
+        }
+        
+        .btn-wrapper:hover .main-btn::after {
+            opacity: 1;
         }
 
-        .btn-wrapper:hover .main-btn::before {
-            left: 200%;
-            transition: 0.8s ease-in-out;
+        .btn-wrapper:hover .btn-glow-ring {
+            opacity: 1;
+            filter: blur(25px);
         }
 
-        .btn-icon {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .btn-wrapper:hover .btn-icon {
-            transform: rotate(-15deg) scale(1.15);
-            color: #fff;
-            filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.8));
-        }
-
-        /* --- MODAL (SZKŁO PREMIUM) --- */
+        /* --- MODAL (COLOR GLASS) --- */
         .modal-overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            background: rgba(0, 0, 0, 0); 
+            opacity: 0; pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(15, 5, 25, 0.6); 
             backdrop-filter: blur(0px);
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-            backdrop-filter: blur(8px);
-            background: rgba(0, 0, 0, 0.6);
+            opacity: 1; pointer-events: all;
+            backdrop-filter: blur(16px);
         }
 
         .download-window {
             transform: scale(0.9) translateY(40px);
             opacity: 0;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            background: rgba(18, 18, 24, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Jaśniejsza góra */
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            /* Gradient background dla okna */
+            background: linear-gradient(160deg, rgba(30, 40, 45, 0.9) 0%, rgba(15, 20, 30, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 1px rgba(0, 255, 157, 0.1), 0 50px 100px -20px rgba(0,0,0,0.8);
             border-radius: 32px;
-            box-shadow: 0 40px 80px -10px rgba(0, 0, 0, 0.8), 
-                        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-            max-width: 500px;
-            width: 90%;
-            backdrop-filter: blur(40px) saturate(180%);
+            max-width: 500px; width: 90%;
         }
 
         .modal-overlay.active .download-window {
-            transform: scale(1) translateY(0);
-            opacity: 1;
+            transform: scale(1) translateY(0); opacity: 1;
         }
 
         .progress-bar-container {
@@ -173,84 +163,87 @@
             border-radius: 999px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.02);
+            height: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .progress-bar-fill {
             width: 0%;
-            background: linear-gradient(90deg, #00c6ff, #0072ff); /* Głęboki błękit */
-            box-shadow: 0 0 25px rgba(0, 198, 255, 0.6);
+            /* Tęczowy gradient paska z animacją */
+            background: linear-gradient(90deg, var(--vivid-green), #00d4ff, var(--hot-pink), var(--vivid-green));
+            background-size: 200% 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
             border-radius: 999px;
             transition: width 0.1s linear;
-            position: relative;
+            animation: gradient-shift 1.5s linear infinite;
         }
-        
-        /* Połysk na pasku */
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+
+        @keyframes gradient-shift {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
         }
 
         /* --- TŁO CANVAS --- */
         #bgCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            opacity: 0.6;
+            position: fixed; top: 0; left: 0;
+            z-index: 0; opacity: 1; /* Pełna jasność cząsteczek */
+            mix-blend-mode: screen; /* Ładne mieszanie z gradientem tła */
         }
 
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
-            background-size: 100% 3px;
-            pointer-events: none;
-            z-index: 100;
-            opacity: 0.1;
-            mix-blend-mode: overlay;
+        .overlay-gradient {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at bottom right, rgba(255, 0, 127, 0.1), transparent 50%),
+                        radial-gradient(circle at top left, rgba(0, 255, 157, 0.1), transparent 50%);
+            z-index: 1; pointer-events: none;
         }
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col items-center justify-center">
 
     <!-- Efekty Tła -->
+    <div class="overlay-gradient"></div>
     <canvas id="bgCanvas"></canvas>
-    <div class="scanlines"></div>
     <div id="cursor-glow"></div>
 
     <!-- Główna Zawartość -->
-    <main class="relative z-10 flex flex-col items-center text-center space-y-24 select-none">
+    <main class="relative z-10 flex flex-col items-center text-center space-y-20 select-none">
         
         <!-- Header -->
-        <div class="relative">
-            <div class="absolute inset-0 bg-cyan-500/20 blur-3xl rounded-full opacity-20"></div>
-            <h1 class="title-glitch text-5xl md:text-8xl font-black mb-2 tracking-tighter relative z-10">THE MAZE</h1>
-            <div class="flex items-center justify-center gap-4 mt-4 opacity-80">
-                <div class="h-[1px] w-12 bg-gradient-to-r from-transparent to-cyan-500"></div>
-                <p class="text-cyan-400 text-[10px] tracking-[0.6em] uppercase font-bold text-shadow-glow">WERSJA 1.1 JUŻ DOSTĘPNA</p>
-                <div class="h-[1px] w-12 bg-gradient-to-l from-transparent to-cyan-500"></div>
+        <div class="relative group">
+            <!-- Wielobarwna poświata za tekstem -->
+            <div class="absolute inset-0 bg-gradient-to-r from-green-400 via-cyan-500 to-pink-500 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-1000 rounded-full scale-150"></div>
+            
+            <h1 class="title-vivid text-5xl md:text-9xl mb-4 tracking-tighter relative z-10">
+                THE MAZE
+            </h1>
+            
+            <div class="flex items-center justify-center gap-6 mt-2 relative z-10">
+                <span class="h-[1px] w-16 bg-gradient-to-r from-transparent to-pink-500"></span>
+                <div class="flex items-center gap-3 px-4 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 animate-pulse"></i>
+                    <p class="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-pink-300 text-xs tracking-[0.3em] font-bold">VIVID SPRING v1.1</p>
+                    <i data-lucide="flower-2" class="w-4 h-4 text-pink-400 animate-pulse" style="animation-delay: 0.5s"></i>
+                </div>
+                <span class="h-[1px] w-16 bg-gradient-to-l from-transparent to-green-500"></span>
             </div>
         </div>
 
         <!-- Przycisk Główny -->
-        <div class="flex flex-col items-center gap-8">
+        <div class="flex flex-col items-center gap-10">
             <div class="btn-wrapper cursor-pointer" onclick="openDownloadModal()">
                 <div class="btn-glow-ring"></div>
                 <button class="main-btn group flex items-center gap-6 text-xl text-white font-bold tracking-widest uppercase">
-                    <span class="btn-icon">
-                        <i data-lucide="download-cloud" class="w-7 h-7 text-cyan-400 group-hover:text-white transition-colors"></i>
+                    <span class="btn-icon transform group-hover:-rotate-12 transition-transform duration-500">
+                        <!-- Ikona zmienia kolor na hover -->
+                        <i data-lucide="download" class="w-8 h-8 text-green-400 group-hover:text-yellow-300 transition-colors"></i>
                     </span>
-                    <span>Pobierz Grę</span>
+                    <span class="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-green-200 group-hover:to-pink-200 transition-colors">Pobierz Grę</span>
                 </button>
             </div>
             
-            <div class="flex items-center gap-3 text-gray-400 text-[10px] font-mono tracking-wider opacity-50 hover:opacity-90 transition-opacity bg-black/60 px-4 py-1.5 rounded-full border border-white/5 backdrop-blur-sm">
-                <i data-lucide="box-select" class="w-3 h-3 text-cyan-500"></i>
-                <span>ROZMIAR: <span class="text-gray-200 font-bold">44.0 MB</span></span>
+            <div class="flex items-center gap-3 text-xs font-mono tracking-wider opacity-80 bg-black/40 px-5 py-2 rounded-full border border-green-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,157,0.1)]">
+                <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-green-400"></i>
+                <span class="text-gray-300">SIZE: <span class="text-white font-bold text-shadow-sm">44.0 MB</span></span>
             </div>
         </div>
 
@@ -260,75 +253,82 @@
     <div id="modalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center">
         
         <div class="download-window p-10 relative overflow-hidden">
-            <!-- Glow w tle okna -->
-            <div class="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+            <!-- Żywe plamy kolorów w tle modalu -->
+            <div class="absolute -top-32 -right-32 w-80 h-80 bg-green-500/20 rounded-full blur-[80px] pointer-events-none"></div>
+            <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-pink-500/20 rounded-full blur-[80px] pointer-events-none"></div>
 
             <!-- Header Modalu -->
             <div class="flex justify-between items-start mb-10 relative z-10">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center border border-white/10 shadow-lg">
-                        <i data-lucide="hard-drive-download" class="w-6 h-6 text-cyan-400"></i>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-400/20 to-pink-500/10 flex items-center justify-center border border-white/10 shadow-lg group">
+                        <i data-lucide="cloud-download" class="w-7 h-7 text-green-400 group-hover:text-pink-400 transition-colors duration-500"></i>
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white tracking-widest uppercase font-syncopate">Instalator</h3>
-                        <p class="text-[10px] text-gray-400 uppercase tracking-wider mt-1">Połączenie szyfrowane</p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider mt-1">Połączenie: <span class="text-green-400 font-bold">Zabezpieczone</span></p>
                     </div>
                 </div>
                 <!-- Status Badge -->
-                <div class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
-                    <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse inline-block mr-2"></div>
-                    <span class="text-[9px] text-cyan-300 font-bold tracking-wider uppercase">Online</span>
+                <div class="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30 flex items-center gap-2 shadow-[0_0_10px_rgba(0,255,157,0.2)]">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <span class="text-[10px] text-green-300 font-bold tracking-wider uppercase">Online</span>
                 </div>
             </div>
 
             <!-- Informacje o Pliku -->
-            <div class="flex items-center justify-between mb-8 bg-black/20 p-5 rounded-2xl border border-white/5 relative z-10">
-                <div class="flex items-center gap-4">
-                    <i data-lucide="file-archive" class="w-8 h-8 text-gray-400"></i>
+            <div class="flex items-center justify-between mb-8 bg-white/5 p-6 rounded-2xl border border-white/10 relative z-10 backdrop-blur-sm">
+                <div class="flex items-center gap-5">
+                    <i data-lucide="file-archive" class="w-8 h-8 text-pink-400"></i>
                     <div class="text-left">
                         <div class="text-white font-bold text-lg tracking-wide">themaze.zip</div>
-                        <div class="text-xs text-gray-500 mt-0.5">Wersja 1.1 stable</div>
+                        <div class="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                            <span class="px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/20">v1.1</span>
+                            <span class="text-green-400/80">Spring Edition</span>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-mono text-white font-bold">44 MB</div>
-                    <div class="text-[10px] text-gray-600 uppercase">Rozmiar</div>
+                    <div class="text-base font-mono text-white font-bold">44.00 MB</div>
+                    <div class="text-[10px] text-gray-500 uppercase mt-1">Skompresowany</div>
                 </div>
             </div>
 
             <!-- Pasek Postępu -->
             <div class="mb-3 flex justify-between text-xs font-mono items-end relative z-10">
-                <span id="statusText" class="text-cyan-300/80">Oczekiwanie...</span>
-                <span id="percentText" class="text-3xl font-bold text-white tracking-tighter">0%</span>
+                <span id="statusText" class="text-green-200/70 font-bold transition-all duration-300">Inicjowanie...</span>
+                <span id="percentText" class="text-3xl font-bold text-white tracking-tighter drop-shadow-lg tabular-nums">0%</span>
             </div>
             
-            <div class="progress-bar-container w-full h-3 mb-8 relative z-10">
+            <div class="progress-bar-container w-full mb-8 relative z-10">
                 <div id="progressBar" class="progress-bar-fill h-full"></div>
             </div>
 
             <!-- Statystyki -->
-            <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-6 relative z-10">
+            <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-6 relative z-10">
                 <div>
-                    <p class="text-[10px] text-gray-500 uppercase mb-1 tracking-wider">Transfer</p>
-                    <p id="speedText" class="text-sm font-mono text-white/90">-- MB/s</p>
+                    <p class="text-[10px] text-gray-500 uppercase mb-1 tracking-wider">Prędkość</p>
+                    <p id="speedText" class="text-sm font-mono text-white/90 tabular-nums">-- MB/s</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[10px] text-gray-500 uppercase mb-1 tracking-wider">Estymacja</p>
-                    <p id="timeLeft" class="text-sm font-mono text-white/90">-- s</p>
+                    <p class="text-[10px] text-gray-500 uppercase mb-1 tracking-wider">Szacowany Czas</p>
+                    <p id="timeLeft" class="text-sm font-mono text-white/90 tabular-nums">-- s</p>
                 </div>
             </div>
 
             <!-- Ekran Sukcesu -->
-            <div id="successMsg" class="absolute inset-0 bg-[#08080c]/95 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-700 z-30 translate-y-8">
+            <div id="successMsg" class="absolute inset-0 bg-[#0d1510]/95 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-700 z-30 translate-y-8">
                 <div class="relative mb-8">
-                    <div class="absolute inset-0 bg-green-500 blur-3xl opacity-20 rounded-full animate-pulse"></div>
-                    <div class="w-24 h-24 rounded-full border-2 border-green-500/30 flex items-center justify-center relative z-10 scale-0 transition-transform duration-500 delay-100" id="successIconWrapper">
-                        <i data-lucide="check" class="w-10 h-10 text-green-400" id="successIcon"></i>
+                    <!-- Eksplozja kolorów przy sukcesie -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-400 to-pink-500 blur-3xl opacity-30 rounded-full animate-pulse"></div>
+                    <div class="w-24 h-24 rounded-full border-2 border-green-400 flex items-center justify-center relative z-10 scale-0 transition-transform duration-500 delay-100 bg-black/20" id="successIconWrapper">
+                        <i data-lucide="check" class="w-12 h-12 text-green-400" id="successIcon"></i>
                     </div>
                 </div>
-                <h2 class="text-4xl font-black text-white mb-3 tracking-widest uppercase">Gotowe</h2>
-                <p class="text-gray-400 text-xs uppercase tracking-[0.2em]">Pobieranie zakończone</p>
+                <h2 class="text-4xl font-black text-white mb-2 tracking-widest uppercase font-syncopate text-shadow-lg">Gotowe!</h2>
+                <p class="text-green-400 text-xs uppercase tracking-[0.3em] font-bold">Pobrano pomyślnie</p>
             </div>
         </div>
     </div>
@@ -336,7 +336,7 @@
     <script>
         lucide.createIcons();
 
-        /* --- SPOTLIGHT CURSOR --- */
+        /* --- FIREFLY CURSOR --- */
         const cursorGlow = document.getElementById('cursor-glow');
         document.addEventListener('mousemove', (e) => {
             cursorGlow.style.left = e.clientX + 'px';
@@ -354,55 +354,103 @@
         const successIconWrapper = document.getElementById('successIconWrapper');
 
         let isDownloading = false;
+        let animationFrameId;
 
         function openDownloadModal() {
             if (isDownloading) return;
             isDownloading = true;
             modalOverlay.classList.add('active');
 
+            // Reset UI
+            progressBar.style.width = '0%';
+            percentText.innerText = '0%';
+            statusText.innerText = "Łączenie z serwerem...";
+            progressBar.style.background = "linear-gradient(90deg, var(--vivid-green), #00d4ff, var(--hot-pink), var(--vivid-green))";
+            progressBar.style.backgroundSize = "200% 100%";
+            progressBar.style.boxShadow = "0 0 20px rgba(0, 255, 157, 0.6)";
+
             let progress = 0;
             const totalSize = 44.0;
             
-            // Start simulation
-            const interval = setInterval(() => {
-                let increment = Math.random() * 1.8 + 0.2; 
-                if (progress > 90) increment = 0.2; 
-                
-                progress += increment;
+            // Lepsza symulacja prędkości
+            let speed = 0;
+            let lastTime = performance.now();
+            let phase = 'connect'; // connect, download, verify
 
-                if (progress >= 100) {
+            function animateDownload(currentTime) {
+                const deltaTime = currentTime - lastTime;
+                lastTime = currentTime;
+
+                // Symulacja zmiennej prędkości
+                if (phase === 'connect') {
+                    progress += 0.2;
+                    if (progress > 5) phase = 'download';
+                } else if (phase === 'download') {
+                    // Szybki środek, zwalnianie przy końcu
+                    let baseSpeed = (progress < 80) ? 0.8 : 0.4;
+                    let variance = (Math.random() - 0.5) * 0.2;
+                    progress += baseSpeed + variance;
+                    
+                    if (progress > 98) {
+                        progress = 98;
+                        phase = 'verify';
+                        setTimeout(() => { phase = 'complete'; }, 800);
+                    }
+                } else if (phase === 'complete') {
                     progress = 100;
-                    clearInterval(interval);
-                    completeDownload();
                 }
 
-                updateUI(progress, totalSize);
-            }, 50);
+                // Bezpiecznik
+                if (progress > 100) progress = 100;
+
+                updateUI(progress, totalSize, phase);
+
+                if (progress < 100) {
+                    animationFrameId = requestAnimationFrame(animateDownload);
+                } else {
+                    completeDownload();
+                }
+            }
+            
+            animationFrameId = requestAnimationFrame(animateDownload);
         }
 
-        function updateUI(progress, totalSize) {
+        function updateUI(progress, totalSize, phase) {
             progressBar.style.width = `${progress}%`;
             percentText.innerText = `${Math.floor(progress)}%`;
 
             const downloaded = (totalSize * (progress / 100)).toFixed(1);
             
-            if (progress < 10) statusText.innerText = "Łączenie z serwerem...";
-            else if (progress < 40) statusText.innerText = `Pobieranie danych... (${downloaded} MB)`;
-            else if (progress < 80) statusText.innerText = `Optymalizacja... (${downloaded} MB)`;
-            else statusText.innerText = "Finalizacja pakietu...";
+            // Dynamiczne teksty
+            if (phase === 'connect') {
+                statusText.innerText = "Negocjowanie połączenia...";
+            } else if (phase === 'download') {
+                if (progress < 30) statusText.innerText = `Pobieranie pakietów... (${downloaded} MB)`;
+                else if (progress < 60) statusText.innerText = `Optymalizacja łącza... (${downloaded} MB)`;
+                else statusText.innerText = `Deszyfrowanie danych... (${downloaded} MB)`;
+            } else if (phase === 'verify') {
+                statusText.innerText = `Weryfikacja sumy kontrolnej...`;
+            } else {
+                statusText.innerText = "Finalizacja...";
+            }
 
-            const speed = (Math.random() * 5 + 12).toFixed(1); 
-            speedText.innerText = `${speed} MB/s`;
+            // Symulacja licznika prędkości
+            const currentSpeed = (Math.random() * 5 + 15 + (progress > 80 ? -10 : 0)).toFixed(1); 
+            speedText.innerText = `${Math.max(2, currentSpeed)} MB/s`;
             
-            const remaining = (100 - progress) / 25; 
-            timeLeft.innerText = `${Math.max(0, remaining.toFixed(1))} s`;
+            // Symulacja czasu
+            const remaining = Math.max(0, (100 - progress) / 20).toFixed(1); 
+            timeLeft.innerText = `${remaining} s`;
         }
 
         function completeDownload() {
             statusText.innerText = "Zapisywanie na dysku...";
             statusText.className = "text-green-400 font-bold tracking-wide";
-            progressBar.style.backgroundColor = "#22c55e";
-            progressBar.style.boxShadow = "0 0 30px #22c55e";
+            
+            // Pasek robi się jednolicie zielony na koniec
+            progressBar.style.background = "#22c55e";
+            progressBar.style.boxShadow = "0 0 40px #22c55e";
+            progressBar.style.animation = "none"; // Stop shimmer
             
             setTimeout(() => {
                 successMsg.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-8');
@@ -416,7 +464,6 @@
                 link.click();
                 document.body.removeChild(link);
 
-                // Auto close
                 setTimeout(() => {
                     modalOverlay.classList.remove('active');
                     setTimeout(() => {
@@ -425,23 +472,32 @@
                         successIconWrapper.classList.add('scale-0');
                         progressBar.style.width = '0%';
                         percentText.innerText = '0%';
-                        statusText.innerText = 'Oczekiwanie...';
-                        statusText.className = "text-cyan-300/80";
-                        progressBar.style.backgroundColor = ""; 
+                        statusText.innerText = 'Inicjowanie...';
+                        statusText.className = "text-green-200/70 font-bold";
+                        // Reset gradientu paska
+                        progressBar.style.background = "linear-gradient(90deg, var(--vivid-green), #00d4ff, var(--hot-pink))"; 
                         progressBar.style.boxShadow = "";
                     }, 1000);
-                }, 3500);
+                }, 4000);
 
-            }, 800);
+            }, 600);
         }
 
-        /* --- TŁO 3D TUNEL (DYNAMIC COLORS) --- */
+        /* --- TŁO: INTENSYWNE CZĄSTECZKI --- */
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
         let particles = [];
-        let rotation = 0;
+        
+        // Żywa Paleta Wiosny (HSLA Strings)
+        const colors = [
+            'hsla(320, 100%, 70%,', // Hot Pink
+            'hsla(150, 100%, 60%,', // Vivid Green
+            'hsla(50, 100%, 70%,',  // Bright Yellow
+            'hsla(190, 100%, 70%,', // Cyan
+            'hsla(280, 80%, 70%,'   // Purple
+        ];
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -450,67 +506,86 @@
 
         class Particle {
             constructor() {
-                this.x = (Math.random() - 0.5) * width;
-                this.y = (Math.random() - 0.5) * height;
-                this.z = Math.random() * width; 
-                this.size = Math.random() * 2 + 0.5;
-                // Losowy odcień dla różnorodności (Blue to Purple)
-                this.hueBase = Math.random() > 0.5 ? 180 : 260; 
+                this.reset();
+                this.y = Math.random() * height;
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20;
+                // Większe zróżnicowanie rozmiarów
+                this.size = Math.random() * 4 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = Math.random() * 2 + 0.8;
+                this.sway = Math.random() * 0.05;
+                this.swayOffset = Math.random() * Math.PI * 2;
+                
+                // Losowy kolor z żywej palety
+                this.colorString = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = Math.random() * 0.6 + 0.4;
+                
+                // Czy to świetlik? (świecąca kropka) czy płatek (elipsa)
+                this.isFirefly = Math.random() > 0.8;
+                if(this.isFirefly) {
+                   this.size = Math.random() * 2.5; 
+                   this.speedY *= 0.5; // Wolniejsze
+                }
             }
 
             update() {
-                this.z -= 6; // Prędkość
-                if (this.z <= 0) {
-                    this.z = width;
-                    this.x = (Math.random() - 0.5) * width;
-                    this.y = (Math.random() - 0.5) * height;
+                this.swayOffset += this.sway;
+                this.x += Math.sin(this.swayOffset) * 1 + this.speedX;
+                this.y += this.speedY;
+
+                if (this.y > height + 20 || this.x < -20 || this.x > width + 20) {
+                    this.reset();
+                }
+
+                if (this.isFirefly) {
+                    this.alpha += (Math.random() - 0.5) * 0.1;
+                    this.alpha = Math.max(0.2, Math.min(1, this.alpha));
                 }
             }
 
             draw() {
-                const perspective = 300;
-                const scale = perspective / (perspective + this.z);
+                ctx.fillStyle = `${this.colorString} ${this.alpha})`;
+                ctx.beginPath();
                 
-                const angle = rotation * 0.0003;
-                const cos = Math.cos(angle);
-                const sin = Math.sin(angle);
+                if (this.isFirefly) {
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = this.colorString + ' 1)';
+                } else {
+                    // Płatek
+                    ctx.ellipse(this.x, this.y, this.size, this.size * 1.4, this.swayOffset, 0, Math.PI * 2);
+                    ctx.shadowBlur = 0;
+                }
                 
-                let rx = this.x * cos - this.y * sin;
-                let ry = this.x * sin + this.y * cos;
-
-                const x2d = (rx * scale) + width / 2;
-                const y2d = (ry * scale) + height / 2;
-                const s = this.size * scale * 3;
-
-                const alpha = Math.min(1, scale * 1.5);
-                
-                // Dynamiczny kolor w zależności od głębi (z)
-                // Im bliżej (mniejsze z), tym jaśniejszy kolor
-                const lightness = 50 + (1 - this.z / width) * 50;
-                
-                ctx.fillStyle = `hsla(${this.hueBase}, 80%, ${lightness}%, ${alpha})`;
-                ctx.fillRect(x2d, y2d, s, s);
+                ctx.fill();
+                ctx.shadowBlur = 0;
             }
         }
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < 600; i++) {
+            // Więcej cząsteczek dla efektu "wow"
+            for (let i = 0; i < 200; i++) {
                 particles.push(new Particle());
             }
         }
 
         function animate() {
-            // Smugi są delikatniejsze
-            ctx.fillStyle = 'rgba(3, 3, 4, 0.2)'; 
-            ctx.fillRect(0, 0, width, height);
-
-            rotation += 1;
+            ctx.clearRect(0, 0, width, height);
+            
+            // Tryb mieszania dla lepszych kolorów
+            ctx.globalCompositeOperation = 'lighter';
 
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
+            
+            ctx.globalCompositeOperation = 'source-over';
 
             requestAnimationFrame(animate);
         }
