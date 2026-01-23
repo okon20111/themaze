@@ -303,7 +303,8 @@
                     <i data-lucide="package" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <div class="text-base font-bold text-gray-800">The_Maze_v1.1.exe</div>
+                    <!-- ZMIANA: Wyświetlana nazwa pliku to teraz .zip -->
+                    <div class="text-base font-bold text-gray-800">themaze.zip</div>
                     <div class="text-xs text-gray-500 font-medium">Oficjalny pakiet instalacyjny</div>
                 </div>
             </div>
@@ -396,11 +397,12 @@
                 successMsg.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
                 successMsg.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
                 
+                // NAPRAWA: Zmieniono link na konkretny plik i odkomentowano kliknięcie
                 const link = document.createElement('a');
-                link.href = '#'; 
-                link.download = 'The_Maze_v1.1.exe';
+                link.href = 'themaze.zip';  // Plik znajduje się w tym samym folderze
+                link.download = 'themaze.zip';
                 document.body.appendChild(link);
-                // link.click(); 
+                link.click(); // Automatyczne kliknięcie uruchamiające pobieranie
                 document.body.removeChild(link);
             }, 400);
         }
