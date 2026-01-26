@@ -28,7 +28,7 @@
             cursor: default;
         }
 
-        /* --- INITIAL LOADER (NOWOŚĆ) --- */
+        /* --- INITIAL LOADER (ZOPTOMALIZOWANY) --- */
         #initial-loader {
             position: fixed;
             inset: 0;
@@ -38,6 +38,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            /* Dodano will-change dla optymalizacji wydajności */
+            will-change: opacity;
             transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
         }
 
@@ -109,6 +111,7 @@
             z-index: 5;
             mix-blend-mode: overlay;
             transition: opacity 0.3s;
+            will-change: transform; /* Optymalizacja ruchu kursora */
         }
 
         /* --- GOD RAYS (Słoneczne promienie - Subtelne) --- */
@@ -140,8 +143,10 @@
         .animate-enter {
             opacity: 0;
             transform: translateY(30px);
-            animation: bounceIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            animation-play-state: paused; /* Startujemy dopiero po loaderze */
+            /* Zmieniono czas trwania na nieco dłuższy dla płynności */
+            animation: bounceIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-play-state: paused; 
+            will-change: transform, opacity; /* Optymalizacja animacji wejścia */
         }
         
         body.loaded .animate-enter {
@@ -152,13 +157,12 @@
         .delay-200 { animation-delay: 0.2s; }
 
         @keyframes bounceIn {
-            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); } /* Mniejsza skala startowa dla płynniejszego efektu */
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .title-happy {
             font-family: 'Syncopate', sans-serif;
-            /* Tęczowy gradient tekstu */
             background: linear-gradient(90deg, #6c5ce7, #fd79a8, #0984e3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -170,7 +174,7 @@
         .subtitle-hand {
             font-family: 'Kaushan Script', cursive;
             font-size: 2rem;
-            color: #fd79a8; /* Różowy */
+            color: #fd79a8;
             transform: rotate(-3deg);
             display: inline-block;
             text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
@@ -181,7 +185,6 @@
             position: relative;
             z-index: 20;
             border-radius: 50px;
-            /* Kolorowy cień pod spodem */
             box-shadow: 0 20px 50px -10px rgba(253, 121, 168, 0.4); 
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
         }
@@ -197,9 +200,10 @@
             backdrop-filter: blur(25px);
             position: relative;
             overflow: hidden;
+            /* Fix dla Safari/Chrome przy animacjach blur */
+            transform: translate3d(0,0,0);
         }
 
-        /* Błysk */
         .btn-inner::after {
             content: '';
             position: absolute;
@@ -251,7 +255,7 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.5s ease;
-            background: rgba(255, 255, 255, 0.1); /* Bardzo jasne tło */
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(0px);
         }
         .modal-overlay.active {
@@ -295,7 +299,7 @@
         /* --- CANVAS --- */
         #bgCanvas { position: fixed; inset: 0; z-index: 1; }
         
-        /* Winieta teraz jest biała/jasna */
+        /* Winieta */
         .vignette { 
             position: fixed; inset: 0; 
             background: radial-gradient(circle, transparent 50%, rgba(255,255,255,0.4) 100%); 
@@ -337,7 +341,6 @@
             <!-- Wersja 1.2 -->
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white shadow-sm backdrop-blur-sm">
                 <i data-lucide="flower-2" class="w-4 h-4 text-pink-500 animate-spin-slow"></i>
-                <!-- ZWIĘKSZONY ROZMIAR: text-xs -> text-sm -->
                 <span class="text-sm font-bold uppercase tracking-widest text-gray-600">Wersja 1.2</span>
             </div>
         </div>
@@ -366,7 +369,7 @@
             <!-- Tylko Rozmiar -->
             <div class="info-pill animate-enter delay-200">
                 <i data-lucide="database" class="w-4 h-4 text-indigo-500"></i>
-                <span class="uppercase font-bold text-gray-600">Rozmiar: <span class="text-indigo-600 font-black ml-1">37.8 MB</span></span>
+                <span class="uppercase font-bold text-gray-600">Rozmiar: <span class="text-indigo-600 font-black ml-1">35.6 MB</span></span>
             </div>
 
         </div>
@@ -376,7 +379,6 @@
     <div id="modalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="modal-window p-8 relative">
             
-            <!-- Konfetti w tle modala -->
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-200/50 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-200/50 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -390,7 +392,6 @@
                     <i data-lucide="package" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <!-- ZMIANA: Wyświetlana nazwa pliku to teraz .zip -->
                     <div class="text-base font-bold text-gray-800">themaze.zip</div>
                     <div class="text-xs text-gray-500 font-medium">Oficjalny pakiet instalacyjny</div>
                 </div>
@@ -422,33 +423,49 @@
     </div>
 
     <script>
-        /* --- LOADER LOGIC --- */
+        /* --- LOADER LOGIC (ZOPTOMALIZOWANY) --- */
         window.addEventListener('load', () => {
-            // Czekamy chwilę, żeby użytkownik zobaczył animację (symulacja ładowania)
             setTimeout(() => {
                 const loader = document.getElementById('initial-loader');
-                loader.classList.add('fade-out');
                 
-                // Uruchamiamy animacje wejścia na stronie
-                document.body.classList.add('loaded');
+                // Używamy requestAnimationFrame dla płynności
+                requestAnimationFrame(() => {
+                    loader.classList.add('fade-out');
+                    
+                    // NAPRAWA PŁYNNOŚCI: 
+                    // Opóźniamy start animacji elementów pod spodem o 200ms.
+                    // Dzięki temu przeglądarka najpierw zaczyna rysować zanikanie loadera,
+                    // a dopiero potem (gdy FPS jest stabilny) startuje animacje przycisków i tekstu.
+                    setTimeout(() => {
+                        document.body.classList.add('loaded');
+                    }, 250);
 
-                // Usuwamy element z DOM po zakończeniu tranzycji
-                setTimeout(() => {
-                    loader.remove();
-                }, 800);
-            }, 1500); // Loader widoczny przez 1.5 sekundy
+                    setTimeout(() => {
+                        loader.remove();
+                    }, 1000); // 800ms transition + 200ms buffer
+                });
+            }, 1500);
         });
 
         lucide.createIcons();
 
         /* --- SPOTLIGHT --- */
         const cursorGlow = document.getElementById('cursor-glow');
+        let mouseX = 0, mouseY = 0;
+        
         document.addEventListener('mousemove', (e) => {
-            requestAnimationFrame(() => {
-                cursorGlow.style.left = e.clientX + 'px';
-                cursorGlow.style.top = e.clientY + 'px';
-            });
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
+
+        // Optymalizacja pętli rysowania kursora
+        function updateCursor() {
+            cursorGlow.style.left = mouseX + 'px';
+            cursorGlow.style.top = mouseY + 'px';
+            requestAnimationFrame(updateCursor);
+        }
+        updateCursor();
+
 
         /* --- DOWNLOAD LOGIC --- */
         const modalOverlay = document.getElementById('modalOverlay');
@@ -501,12 +518,11 @@
                 successMsg.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
                 successMsg.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
                 
-                // NAPRAWA: Zmieniono link na konkretny plik i odkomentowano kliknięcie
                 const link = document.createElement('a');
-                link.href = 'themaze.zip';  // Plik znajduje się w tym samym folderze
+                link.href = 'themaze.zip';
                 link.download = 'themaze.zip';
                 document.body.appendChild(link);
-                link.click(); // Automatyczne kliknięcie uruchamiające pobieranie
+                link.click();
                 document.body.removeChild(link);
             }, 400);
         }
@@ -529,13 +545,12 @@
             init() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.size = Math.random() * 8 + 4; // Większe
+                this.size = Math.random() * 8 + 4;
                 this.speedY = Math.random() * 1.5 + 0.5;
                 this.speedX = Math.random() * 1 - 0.5;
                 this.rotation = Math.random() * 360;
                 this.rotationSpeed = Math.random() * 2 - 1;
                 
-                // Żywe kolory wiosenne (Pink, Purple, Blue, Gold)
                 const colors = ['#fd79a8', '#6c5ce7', '#0984e3', '#ffeaa7', '#55efc4'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.opacity = Math.random() * 0.6 + 0.2;
@@ -557,7 +572,6 @@
                 ctx.globalAlpha = this.opacity;
                 ctx.fillStyle = this.color;
                 
-                // Rysujemy kształt przypominający płatek lub konfetti (zaokrąglony kwadrat)
                 ctx.beginPath();
                 ctx.roundRect(-this.size/2, -this.size/2, this.size, this.size, 2);
                 ctx.fill();
