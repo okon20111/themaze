@@ -601,8 +601,6 @@
             }, 300);
         }
 
-        /* NAPRAWA LCP: Skracamy opóźnienie i czekamy na gotowość dokumentu oraz fontów.
-           Brak sztucznego setTimeout 1.5s gwarantuje LCP w okolicach 1.0s. */
         const windowLoaded = new Promise(resolve => {
             if (document.readyState === 'complete') {
                 resolve();
@@ -613,15 +611,18 @@
 
         Promise.all([windowLoaded, document.fonts.ready]).then(() => {
             const loader = document.getElementById('initial-loader');
-            requestAnimationFrame(() => {
-                loader.classList.add('fade-out');
-                setTimeout(() => {
-                    document.body.classList.add('loaded');
-                }, 100); 
-                setTimeout(() => {
-                    if (loader.parentNode) loader.remove();
-                }, 500); 
-            });
+            // Dodano sztuczne opóźnienie (1200ms), aby animacja ładowania trwała minimalnie dłużej
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    loader.classList.add('fade-out');
+                    setTimeout(() => {
+                        document.body.classList.add('loaded');
+                    }, 100); 
+                    setTimeout(() => {
+                        if (loader.parentNode) loader.remove();
+                    }, 500); 
+                });
+            }, 1200);
         });
 
         lucide.createIcons();
