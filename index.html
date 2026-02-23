@@ -28,6 +28,12 @@
             cursor: default;
         }
 
+        /* NAPRAWA CLS: Ikony Lucide na starcie zajmują 0x0px ignorując klasy w-8 h-8. 
+           Ustawienie ich jako inline-block rezerwuje miejsce ZANIM skrypt je wyrenderuje. */
+        i[data-lucide] {
+            display: inline-block;
+        }
+
         /* --- TŁO: GLOWING ORBS --- */
         .ambient-orb {
             position: fixed;
@@ -113,6 +119,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: fadeInText 1s ease-out;
+            min-height: 35px; /* Zapobiega skokom podczas ładowania fontów */
         }
 
         @keyframes fadeInText {
@@ -127,7 +134,8 @@
             width: 800px;
             height: 800px;
             background: radial-gradient(circle, rgba(254, 202, 87, 0.2) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
-            transform: translate(-50%, -50%);
+            /* NAPRAWA CLS: Używamy akceleracji GPU zamiast właściwości left/top */
+            transform: translate3d(-1000px, -1000px, 0);
             pointer-events: none;
             z-index: 5;
             mix-blend-mode: overlay;
@@ -197,10 +205,6 @@
             animation: shineGradient 6s linear infinite;
         }
 
-        @keyframes shineGradient {
-            to { background-position: 200% center; }
-        }
-
         .subtitle-hand {
             font-family: 'Kaushan Script', cursive;
             font-size: 2.2rem;
@@ -208,6 +212,7 @@
             transform: rotate(-5deg);
             display: inline-block;
             text-shadow: 2px 2px 0px rgba(255,255,255,1), 0 5px 15px rgba(255, 159, 243, 0.5);
+            min-height: 48px;
         }
 
         /* --- PRZYCISK: GLASS --- */
@@ -423,8 +428,9 @@
             <h1 class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
             
             <!-- Dynamiczna Plakietka Wersji -->
-            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 border border-white/50 shadow-[0_8px_32px_rgba(255,255,255,0.2),inset_0_2px_5px_rgba(255,255,255,0.8)] backdrop-blur-xl dynamic-text">
-                <div id="version-icon-wrapper">
+            <!-- Dodano min-w-[140px] aby uniknąć zmiany rozmiaru przy przełączaniu wersji -->
+            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 border border-white/50 shadow-[0_8px_32px_rgba(255,255,255,0.2),inset_0_2px_5px_rgba(255,255,255,0.8)] backdrop-blur-xl dynamic-text min-w-[160px] justify-center">
+                <div id="version-icon-wrapper" class="flex items-center">
                     <i id="version-icon" data-lucide="flower-2" class="w-4 h-4 text-pink-500 animate-spin-slow"></i>
                 </div>
                 <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-700 drop-shadow-sm">Wersja 1.5</span>
@@ -450,17 +456,18 @@
             <button class="btn-container group cursor-pointer" onclick="openDownloadModal()">
                 <div class="btn-inner">
                     <!-- Szklana Ikona -->
-                    <div class="icon-bounce p-3 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)]">
+                    <div class="icon-bounce p-3 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] flex items-center justify-center">
                         <i data-lucide="sun" class="w-8 h-8 text-yellow-500 drop-shadow-md"></i>
                     </div>
                     
-                    <div class="text-left dynamic-text" id="btn-text-wrapper">
-                        <div id="btn-subtext" class="text-[10px] text-gray-600 font-bold tracking-[0.2em] uppercase mb-1 drop-shadow-sm">Dostępne wyłącznie na Windows 11</div>
-                        <div id="btn-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-emerald-600 transition-colors">POBIERZ TERAZ</div>
+                    <!-- Dodano min-w-[260px] dla stabilności szerokości przycisku -->
+                    <div class="text-left dynamic-text min-w-[260px]" id="btn-text-wrapper">
+                        <div id="btn-subtext" class="text-[10px] text-gray-600 font-bold tracking-[0.2em] uppercase mb-1 drop-shadow-sm min-h-[15px]">Dostępne wyłącznie na Windows 11</div>
+                        <div id="btn-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-emerald-600 transition-colors min-h-[32px]">POBIERZ TERAZ</div>
                     </div>
 
                     <!-- Szklana Strzałka -->
-                    <div class="bg-white/40 backdrop-blur-md border border-white/60 p-2 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)]">
+                    <div class="bg-white/40 backdrop-blur-md border border-white/60 p-2 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center">
                         <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition-transform drop-shadow-sm"></i>
                     </div>
                 </div>
@@ -625,9 +632,10 @@
 
         lucide.createIcons();
 
-        /* --- SPOTLIGHT --- */
+        /* --- SPOTLIGHT / NAPRAWA CLS --- */
         const cursorGlow = document.getElementById('cursor-glow');
-        let mouseX = 0, mouseY = 0;
+        // Kursor startuje z pozycji -1000px, zadeklarowanej w CSS, aby nie migał.
+        let mouseX = -1000, mouseY = -1000;
         
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -635,8 +643,9 @@
         });
 
         function updateCursor() {
-            cursorGlow.style.left = mouseX + 'px';
-            cursorGlow.style.top = mouseY + 'px';
+            // Użycie translate3d eliminuje całkowicie 105 przesunięć layoutu z poprzedniego kodu.
+            // Odejmujemy 400px (połowa z width: 800px), aby wycentrować glow pod kursorem.
+            cursorGlow.style.transform = `translate3d(${mouseX - 400}px, ${mouseY - 400}px, 0)`;
             requestAnimationFrame(updateCursor);
         }
         updateCursor();
