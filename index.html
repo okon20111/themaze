@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Maze - Bright Spring v1.5</title>
+    <title>The Maze - True Spring v1.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@300;500;700;900&family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Outfit:wght@300;500;700;900&family=Kaushan+Script&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --text-main: #2d3436;
-            --text-accent: #6c5ce7;
+            --text-main: #2c3e50;
+            --text-accent: #05c46b;
             --glass-white: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.8);
-            --vibrant-pink: #fd79a8;
-            --sun-yellow: #ffeaa7;
+            --vibrant-pink: #ff9ff3;
+            --sun-yellow: #feca57;
+            --fresh-green: #1dd1a1;
         }
 
         body {
-            /* TŁO: Bardzo jasne, słoneczne, wiosenne */
-            background: linear-gradient(180deg, #e0c3fc 0%, #8ec5fc 100%); /* Fallback */
-            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #dbeafe 40%, #fce7f3 100%);
+            /* TŁO: Prawdziwa wiosna - błękit nieba i zieleń trawy */
+            background: linear-gradient(180deg, #dff9fb 0%, #c7ecee 40%, #eafaf1 70%, #d4efdf 100%);
             font-family: 'Outfit', sans-serif;
             overflow: hidden;
             color: var(--text-main);
@@ -35,12 +35,15 @@
             filter: blur(80px);
             z-index: 0;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.7;
             animation: floatOrb 20s infinite ease-in-out alternate;
         }
-        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #ffeaa7, transparent 70%); }
-        .orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #e0c3fc, transparent 70%); animation-delay: -5s; }
-        .orb-3 { top: 40%; left: 60%; width: 40vw; height: 40vw; background: radial-gradient(circle, #8ec5fc, transparent 70%); animation-duration: 25s; }
+        /* Słońce */
+        .orb-1 { top: -10%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #fff200, transparent 70%); }
+        /* Kwitnące drzewa (róż) */
+        .orb-2 { bottom: -20%; left: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #ff9ff3, transparent 70%); animation-delay: -5s; }
+        /* Świeża zieleń */
+        .orb-3 { top: 40%; left: 30%; width: 45vw; height: 45vw; background: radial-gradient(circle, #1dd1a1, transparent 70%); animation-duration: 25s; }
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
@@ -52,7 +55,7 @@
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: radial-gradient(circle at center, #ffffff 0%, #fce7f3 100%);
+            background: radial-gradient(circle at center, #ffffff 0%, #eafaf1 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -78,8 +81,8 @@
             position: absolute;
             inset: 0;
             border: 4px solid transparent;
-            border-top-color: #fd79a8;
-            border-right-color: #6c5ce7;
+            border-top-color: #05c46b;
+            border-right-color: #ff9ff3;
             border-radius: 50%;
             animation: spinRing 1.5s linear infinite;
         }
@@ -106,7 +109,7 @@
         .loader-text {
             font-family: 'Kaushan Script', cursive;
             font-size: 1.5rem;
-            background: linear-gradient(90deg, #6c5ce7, #fd79a8);
+            background: linear-gradient(90deg, #05c46b, #1dd1a1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: fadeInText 1s ease-out;
@@ -123,7 +126,7 @@
             top: 0; left: 0;
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(255, 230, 0, 0.15) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
+            background: radial-gradient(circle, rgba(254, 202, 87, 0.2) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 5;
@@ -139,8 +142,8 @@
             width: 200vw; height: 200vw;
             background: repeating-conic-gradient(
                 from 0deg,
-                rgba(255, 255, 255, 0.4) 0deg,
-                rgba(255, 255, 255, 0.4) 10deg,
+                rgba(255, 255, 255, 0.5) 0deg,
+                rgba(255, 255, 255, 0.5) 10deg,
                 transparent 10deg,
                 transparent 20deg
             );
@@ -148,7 +151,7 @@
             animation: rotateRays 120s linear infinite;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.3;
+            opacity: 0.25;
             mask-image: radial-gradient(circle, black 20%, transparent 60%);
         }
 
@@ -180,22 +183,31 @@
         }
 
         .title-happy {
-            font-family: 'Syncopate', sans-serif;
-            background: linear-gradient(90deg, #6c5ce7, #fd79a8, #0984e3);
+            font-family: 'Unbounded', sans-serif;
+            background: linear-gradient(to right, #05c46b, #1dd1a1, #ff9ff3, #feca57, #05c46b);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 10px 20px rgba(108, 92, 231, 0.25)) drop-shadow(0 2px 0px rgba(255, 255, 255, 0.8));
+            filter: 
+                drop-shadow(0 15px 25px rgba(5, 196, 107, 0.4)) 
+                drop-shadow(0 4px 0px rgba(255, 255, 255, 1))
+                drop-shadow(0 -1px 2px rgba(255, 255, 255, 0.8));
             letter-spacing: -0.05em;
-            line-height: 0.9;
+            line-height: 1.1;
+            animation: shineGradient 6s linear infinite;
+        }
+
+        @keyframes shineGradient {
+            to { background-position: 200% center; }
         }
 
         .subtitle-hand {
             font-family: 'Kaushan Script', cursive;
             font-size: 2.2rem;
-            color: #fd79a8;
+            color: #ff9ff3;
             transform: rotate(-5deg);
             display: inline-block;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.9), 0 5px 15px rgba(253, 121, 168, 0.4);
+            text-shadow: 2px 2px 0px rgba(255,255,255,1), 0 5px 15px rgba(255, 159, 243, 0.5);
         }
 
         /* --- PRZYCISK: GLASS --- */
@@ -203,22 +215,22 @@
             position: relative;
             z-index: 20;
             border-radius: 50px;
-            box-shadow: 0 20px 50px -10px rgba(253, 121, 168, 0.4); 
+            box-shadow: 0 20px 50px -10px rgba(5, 196, 107, 0.3); 
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
             animation: pulse-shadow 3s infinite alternate;
         }
 
         @keyframes pulse-shadow {
-            0% { box-shadow: 0 20px 40px -10px rgba(253, 121, 168, 0.3); }
-            100% { box-shadow: 0 25px 50px -5px rgba(108, 92, 231, 0.6); }
+            0% { box-shadow: 0 20px 40px -10px rgba(5, 196, 107, 0.2); }
+            100% { box-shadow: 0 25px 50px -5px rgba(255, 159, 243, 0.4); }
         }
 
         .btn-inner {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-bottom-color: rgba(255, 255, 255, 0.2);
-            border-right-color: rgba(255, 255, 255, 0.2);
-            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.8), inset 0 -2px 5px rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.9), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             padding: 20px 50px;
             display: flex;
@@ -236,20 +248,20 @@
             content: '';
             position: absolute;
             top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
             transform: skewX(-20deg);
             transition: 0.5s;
         }
 
         .btn-container:hover {
             transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 30px 60px -12px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 30px 60px -12px rgba(5, 196, 107, 0.35);
         }
         
         .btn-container:hover .btn-inner {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.15) 100%);
-            border-color: rgba(255, 255, 255, 0.8);
-            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.9), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 1), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
         }
 
         .btn-container:hover .btn-inner::after {
@@ -269,21 +281,21 @@
         }
 
         .glass-tab-container {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
         }
 
         .glass-slider {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 100%);
-            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.2), 
-                        inset 0 2px 5px rgba(255, 255, 255, 0.8), 
-                        inset 0 -2px 5px rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-bottom-color: rgba(255, 255, 255, 0.2);
-            border-right-color: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+            box-shadow: 0 8px 25px rgba(5, 196, 107, 0.2), 
+                        inset 0 2px 5px rgba(255, 255, 255, 0.9), 
+                        inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(16px) saturate(150%);
             -webkit-backdrop-filter: blur(16px) saturate(150%);
         }
@@ -302,15 +314,15 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             padding: 8px 24px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
             color: #555;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         /* --- MODAL --- */
@@ -318,14 +330,14 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.5s ease;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(0px);
         }
         .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
         }
         
         .modal-window {
@@ -333,10 +345,10 @@
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border: 1px solid #fff;
             border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(100, 100, 100, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(100, 100, 100, 0.2);
             width: 90%; max-width: 420px;
             overflow: hidden;
             color: #333;
@@ -355,7 +367,7 @@
         }
         .progress-fill {
             width: 0%; height: 100%;
-            background: linear-gradient(45deg, #fd79a8 25%, #e84393 25%, #e84393 50%, #fd79a8 50%, #fd79a8 75%, #e84393 75%, #e84393 100%);
+            background: linear-gradient(45deg, #05c46b 25%, #1dd1a1 25%, #1dd1a1 50%, #05c46b 50%, #05c46b 75%, #1dd1a1 75%, #1dd1a1 100%);
             background-size: 20px 20px;
             border-radius: 20px;
             transition: width 0.1s linear;
@@ -368,11 +380,11 @@
         }
 
         /* --- CANVAS --- */
-        #bgCanvas { position: fixed; inset: 0; z-index: 1; }
+        #bgCanvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         
         .vignette { 
             position: fixed; inset: 0; 
-            background: radial-gradient(circle, transparent 50%, rgba(255,255,255,0.4) 100%); 
+            background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.6) 100%); 
             z-index: 2; pointer-events: none; 
         }
 
@@ -385,10 +397,10 @@
         <div class="loader-icon-wrapper">
             <div class="loader-ring"></div>
             <div class="loader-center-icon">
-                <i data-lucide="flower" class="w-8 h-8 text-pink-500"></i>
+                <i data-lucide="sprout" class="w-8 h-8 text-emerald-500"></i>
             </div>
         </div>
-        <div class="loader-text">Wczytywanie wiosny...</div>
+        <div class="loader-text">Wiosna budzi się do życia...</div>
     </div>
 
     <!-- Warstwy Tła -->
@@ -405,17 +417,17 @@
         
         <!-- Header -->
         <div class="relative mb-8 animate-enter">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/40 blur-[60px] rounded-full pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/50 blur-[60px] rounded-full pointer-events-none"></div>
             
-            <h2 class="subtitle-hand mb-2">Hello Spring!</h2>
+            <h2 class="subtitle-hand mb-2">Prawdziwa Wiosna!</h2>
             <h1 class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
             
             <!-- Dynamiczna Plakietka Wersji -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white shadow-sm backdrop-blur-sm dynamic-text">
+            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 border border-white/50 shadow-[0_8px_32px_rgba(255,255,255,0.2),inset_0_2px_5px_rgba(255,255,255,0.8)] backdrop-blur-xl dynamic-text">
                 <div id="version-icon-wrapper">
                     <i id="version-icon" data-lucide="flower-2" class="w-4 h-4 text-pink-500 animate-spin-slow"></i>
                 </div>
-                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-600">Wersja 1.5</span>
+                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-700 drop-shadow-sm">Wersja 1.5</span>
             </div>
         </div>
 
@@ -424,7 +436,7 @@
             <!-- Pływające tło zakładki -->
             <div id="tab-slider" class="tab-slider glass-slider absolute left-1.5 top-1.5 bottom-1.5 w-[calc(50%-0.375rem)] rounded-full pointer-events-none"></div>
             
-            <button onclick="switchTab('stable')" id="tab-btn-stable" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-indigo-600 transition-colors duration-300">
+            <button onclick="switchTab('stable')" id="tab-btn-stable" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-emerald-600 transition-colors duration-300">
                 Stabilna
             </button>
             <button onclick="switchTab('beta')" id="tab-btn-beta" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-800 transition-colors duration-300">
@@ -438,26 +450,26 @@
             <button class="btn-container group cursor-pointer" onclick="openDownloadModal()">
                 <div class="btn-inner">
                     <!-- Szklana Ikona -->
-                    <div class="icon-bounce p-3 bg-white/30 backdrop-blur-md border border-white/50 rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)]">
-                        <i data-lucide="monitor-play" class="w-8 h-8 text-indigo-600 drop-shadow-md"></i>
+                    <div class="icon-bounce p-3 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)]">
+                        <i data-lucide="sun" class="w-8 h-8 text-yellow-500 drop-shadow-md"></i>
                     </div>
                     
                     <div class="text-left dynamic-text" id="btn-text-wrapper">
-                        <div id="btn-subtext" class="text-[10px] text-gray-700 font-bold tracking-[0.2em] uppercase mb-1 drop-shadow-sm">Dostępne na Windows 10/11</div>
-                        <div id="btn-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-indigo-600 transition-colors">POBIERZ TERAZ</div>
+                        <div id="btn-subtext" class="text-[10px] text-gray-600 font-bold tracking-[0.2em] uppercase mb-1 drop-shadow-sm">Dostępne wyłącznie na Windows 11</div>
+                        <div id="btn-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-emerald-600 transition-colors">POBIERZ TERAZ</div>
                     </div>
 
                     <!-- Szklana Strzałka -->
-                    <div class="bg-white/30 backdrop-blur-md border border-white/40 p-2 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)]">
-                        <i data-lucide="arrow-right" class="w-5 h-5 text-indigo-600 group-hover:translate-x-1 transition-transform drop-shadow-sm"></i>
+                    <div class="bg-white/40 backdrop-blur-md border border-white/60 p-2 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)]">
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition-transform drop-shadow-sm"></i>
                     </div>
                 </div>
             </button>
             
             <!-- Rozmiar -->
             <div class="info-pill animate-enter delay-300 dynamic-text" id="size-wrapper">
-                <i data-lucide="database" class="w-4 h-4 text-indigo-500"></i>
-                <span class="uppercase font-bold text-gray-600">Rozmiar: <span id="size-text" class="text-indigo-600 font-black ml-1">55.2 MB</span></span>
+                <i data-lucide="cloud-download" class="w-4 h-4 text-emerald-500"></i>
+                <span class="uppercase font-bold text-gray-600">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">55.2 MB</span></span>
             </div>
 
         </div>
@@ -467,8 +479,8 @@
     <div id="modalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="modal-window p-8 relative">
             
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-200/50 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-200/50 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-green-200/50 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-200/50 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="flex justify-between items-center mb-6 relative z-10">
                 <h3 class="text-xl font-bold text-gray-800 tracking-tight">Instalator</h3>
@@ -476,7 +488,7 @@
             </div>
 
             <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-8 relative z-10 shadow-inner">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-indigo-500 shadow-sm border border-gray-100">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-gray-100">
                     <i data-lucide="package" class="w-6 h-6"></i>
                 </div>
                 <div>
@@ -487,7 +499,7 @@
 
             <div class="flex justify-between text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-2">
                 <span id="statusText">Gotowy do startu</span>
-                <span id="percentText" class="text-indigo-600">0%</span>
+                <span id="percentText" class="text-emerald-600">0%</span>
             </div>
             
             <div class="progress-track w-full mb-6">
@@ -519,7 +531,7 @@
                 icon: 'flower-2',
                 iconClass: 'animate-spin-slow',
                 btnMain: 'POBIERZ TERAZ',
-                btnSub: 'Dostępne na Windows 10/11',
+                btnSub: 'Dostępne wyłącznie na Windows 11',
                 size: '55.2 MB',
                 file: 'themaze.zip',
                 modalDesc: 'Oficjalny pakiet instalacyjny'
@@ -531,7 +543,7 @@
                 iconClass: 'animate-pulse',
                 btnMain: 'POBIERZ BETĘ',
                 btnSub: 'Wersja testowa / Early Access',
-                size: '38.2 MB', // Przykładowy rozmiar dla wersji beta
+                size: '40.3 MB',
                 file: 'themazebeta.zip',
                 modalDesc: 'Eksperymentalny pakiet testowy'
             }
@@ -551,15 +563,15 @@
 
             if (ver === 'stable') {
                 slider.style.transform = 'translateX(0)';
-                tabStable.classList.replace('text-gray-500', 'text-indigo-600');
+                tabStable.classList.replace('text-gray-500', 'text-emerald-600');
                 tabStable.classList.remove('hover:text-gray-800');
-                tabBeta.classList.replace('text-indigo-600', 'text-gray-500');
+                tabBeta.classList.replace('text-emerald-600', 'text-gray-500');
                 tabBeta.classList.add('hover:text-gray-800');
             } else {
                 slider.style.transform = 'translateX(100%)';
-                tabBeta.classList.replace('text-gray-500', 'text-indigo-600');
+                tabBeta.classList.replace('text-gray-500', 'text-emerald-600');
                 tabBeta.classList.remove('hover:text-gray-800');
-                tabStable.classList.replace('text-indigo-600', 'text-gray-500');
+                tabStable.classList.replace('text-emerald-600', 'text-gray-500');
                 tabStable.classList.add('hover:text-gray-800');
             }
 
@@ -577,7 +589,7 @@
                 // Ikona
                 const iconWrapper = document.getElementById('version-icon-wrapper');
                 iconWrapper.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4 ${data.badgeColor} ${data.iconClass}"></i>`;
-                lucide.createIcons(); // Renderuj nową ikonę
+                lucide.createIcons(); 
 
                 // Przycisk
                 document.getElementById('btn-text').innerText = data.btnMain;
@@ -680,9 +692,9 @@
                 successMsg.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
                 successMsg.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
                 
-                // Pobieranie odpowiedniego pliku na podstawie wybranej wersji
+                // Symulacja pobrania pliku
                 const link = document.createElement('a');
-                link.href = gameVersions[currentVersion].file;
+                link.href = "#"; // Możesz tu dać prawdziwy link
                 link.download = gameVersions[currentVersion].file;
                 document.body.appendChild(link);
                 link.click();
@@ -690,7 +702,7 @@
             }, 400);
         }
 
-        /* --- PARTICLES --- */
+        /* --- WIOSENNE PARTICLES (Płatki, Liście, Pyłki) --- */
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -707,21 +719,49 @@
             }
             init() {
                 this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 6 + 2;
-                this.speedY = Math.random() * 1.5 + 0.2;
+                this.y = Math.random() * height - height; // Startuje wyżej
+                
+                // Typ cząsteczki: 40% płatki wiśni, 40% zielone listki, 20% złote pyłki
+                const rand = Math.random();
+                if (rand < 0.4) {
+                    this.type = 'petal';
+                    const pinks = ['#ff9ff3', '#f8a5c2', '#ffcccc', '#ffb8b8'];
+                    this.color = pinks[Math.floor(Math.random() * pinks.length)];
+                    this.size = Math.random() * 5 + 3;
+                    this.speedY = Math.random() * 1 + 0.5;
+                } else if (rand < 0.8) {
+                    this.type = 'leaf';
+                    const greens = ['#1dd1a1', '#05c46b', '#badc58', '#b8e994'];
+                    this.color = greens[Math.floor(Math.random() * greens.length)];
+                    this.size = Math.random() * 4 + 2;
+                    this.speedY = Math.random() * 1.5 + 0.8;
+                } else {
+                    this.type = 'pollen';
+                    this.color = '#feca57';
+                    this.size = Math.random() * 2 + 1;
+                    this.speedY = Math.random() * 0.5 + 0.2;
+                }
+
                 this.speedX = Math.random() * 1 - 0.5;
                 this.rotation = Math.random() * 360;
-                this.rotationSpeed = Math.random() * 2 - 1;
+                this.rotationSpeed = Math.random() * 4 - 2;
+                this.opacity = Math.random() * 0.6 + 0.4;
                 
-                const colors = ['#fd79a8', '#6c5ce7', '#ffffff', '#ffeaa7', '#a29bfe'];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.isCircle = Math.random() > 0.5;
+                // Wahanie (imitacja wiatru)
+                this.swing = Math.random() * Math.PI * 2;
+                this.swingSpeed = Math.random() * 0.05 + 0.01;
             }
             update() {
+                this.swing += this.swingSpeed;
+                
+                // Płatki i liście lekko kołyszą się na boki
+                if (this.type !== 'pollen') {
+                    this.x += this.speedX + Math.sin(this.swing) * 1.2;
+                } else {
+                    this.x += this.speedX + Math.sin(this.swing) * 0.5;
+                }
+                
                 this.y += this.speedY;
-                this.x += this.speedX + Math.sin(this.y * 0.01) * 0.5;
                 this.rotation += this.rotationSpeed;
                 
                 if (this.y > height + 20) {
@@ -736,18 +776,22 @@
                 ctx.globalAlpha = this.opacity;
                 
                 ctx.beginPath();
-                if (this.isCircle) {
-                    // Świecące kuleczki (bokeh)
+                
+                if (this.type === 'petal' || this.type === 'leaf') {
+                    // Kształt podobny do płatka/listka za pomocą krzywych
+                    ctx.moveTo(0, -this.size);
+                    ctx.bezierCurveTo(this.size, -this.size, this.size*1.5, 0, 0, this.size*1.5);
+                    ctx.bezierCurveTo(-this.size*1.5, 0, -this.size, -this.size, 0, -this.size);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                } else {
+                    // Pyłki słoneczne (świecące kółka)
                     const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
-                    gradient.addColorStop(0, this.color);
+                    gradient.addColorStop(0, '#ffffff');
+                    gradient.addColorStop(0.4, this.color);
                     gradient.addColorStop(1, 'transparent');
                     ctx.fillStyle = gradient;
                     ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    // Miękkie płatki
-                    ctx.fillStyle = this.color;
-                    ctx.roundRect(-this.size/2, -this.size/2, this.size, this.size, this.size/2);
                     ctx.fill();
                 }
                 
@@ -757,7 +801,7 @@
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < 80; i++) particles.push(new Particle());
+            for (let i = 0; i < 70; i++) particles.push(new Particle());
         }
 
         function animate() {
