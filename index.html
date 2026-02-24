@@ -8,8 +8,8 @@
     <!-- Preconnect dla szybszego wczytywania fontów (poprawa LCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- display=block zamiast swap eliminuje przesunięcia wywoływane przez ładowanie fontów -->
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Outfit:wght@300;500;700;900&family=Kaushan+Script&display=block" rel="stylesheet">
+    <!-- UWAGA: Używamy display=swap, aby tekst natychmiast się wyrenderował i nie podnosił wskaźnika LCP -->
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Outfit:wght@300;500;700;900&family=Kaushan+Script&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -56,50 +56,55 @@
             100% { transform: translate(5%, 10%) scale(1.1); }
         }
 
-        /* --- INITIAL LOADER --- */
+        /* --- INITIAL LOADER (DOPRACOWANY) --- */
         #initial-loader {
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: radial-gradient(circle at center, #ffffff 0%, #eafaf1 100%);
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            will-change: opacity;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+            will-change: transform, opacity, filter;
+            transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), filter 0.8s ease;
+        }
+
+        /* Tło loadera z delikatnym glowem */
+        #initial-loader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(29, 209, 161, 0.1) 0%, transparent 60%);
+            pointer-events: none;
         }
 
         #initial-loader.fade-out {
             opacity: 0;
-            visibility: hidden;
+            transform: scale(1.05);
+            filter: blur(10px);
             pointer-events: none;
+            visibility: hidden;
         }
 
         .loader-icon-wrapper {
             position: relative;
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .loader-ring {
             position: absolute;
             inset: 0;
-            border: 4px solid transparent;
+            border: 3px solid rgba(5, 196, 107, 0.1);
             border-top-color: #05c46b;
-            border-right-color: #ff9ff3;
+            border-right-color: #1dd1a1;
             border-radius: 50%;
-            animation: spinRing 1.5s linear infinite;
-        }
-
-        .loader-center-icon {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulseIcon 2s ease-in-out infinite;
+            animation: spinRing 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
 
         @keyframes spinRing {
@@ -107,24 +112,36 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulseIcon {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(0.85); opacity: 0.8; }
-        }
-
         .loader-text {
             font-family: 'Kaushan Script', cursive;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             background: linear-gradient(90deg, #05c46b, #1dd1a1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: fadeInText 1s ease-out;
-            min-height: 35px;
+            margin-bottom: 10px;
+            animation: pulseText 2s infinite alternate;
         }
 
-        @keyframes fadeInText {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes pulseText {
+            from { opacity: 0.8; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1.02); }
+        }
+
+        .loader-progress-container {
+            width: 200px;
+            height: 4px;
+            background: #f1f2f6;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #05c46b, #1dd1a1);
+            border-radius: 4px;
+            transition: width 0.1s ease-out;
         }
 
         /* --- SUNLIGHT CURSOR --- */
@@ -176,6 +193,7 @@
             will-change: transform, opacity;
         }
         
+        /* Animacje startują dopiero gdy body dostanie klasę 'loaded' */
         body.loaded .animate-enter {
             animation-play-state: running;
         }
@@ -183,6 +201,7 @@
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
 
         @keyframes bounceIn {
             0% { opacity: 0; transform: translateY(30px) scale(0.95); }
@@ -218,62 +237,6 @@
             min-height: 48px;
         }
 
-        /* =========================================
-           PRAWDZIWE SZKŁO (REAL GLASS EFFECTS)
-           ========================================= */
-
-        /* Baza dla realistycznego szkła */
-        .glass-premium {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 100%);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-top-color: rgba(255, 255, 255, 0.85); /* Mocny odblask z góry */
-            border-left-color: rgba(255, 255, 255, 0.65); /* Odblask z lewej */
-            box-shadow: 
-                0 8px 32px 0 rgba(0, 0, 0, 0.07),
-                inset 0 2px 6px rgba(255, 255, 255, 0.6), 
-                inset 0 -2px 6px rgba(255, 255, 255, 0.1);
-        }
-
-        /* --- PLAKIETKA WERSJI --- */
-        .badge-glass {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.15) 100%);
-            backdrop-filter: blur(20px) saturate(160%);
-            -webkit-backdrop-filter: blur(20px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 
-                0 4px 15px rgba(0, 0, 0, 0.05),
-                inset 0 1px 3px rgba(255, 255, 255, 0.8);
-        }
-
-        /* --- ZAKŁADKI (TABS) --- */
-        .glass-tab-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(30px) saturate(150%);
-            -webkit-backdrop-filter: blur(30px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.05), 
-                inset 0 2px 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .tab-slider {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .glass-slider {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
-            box-shadow: 
-                0 4px 15px rgba(5, 196, 107, 0.15), 
-                inset 0 2px 6px rgba(255, 255, 255, 1), 
-                inset 0 -2px 4px rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-top-color: rgba(255, 255, 255, 1);
-        }
-
         /* --- PRZYCISK: GLASS --- */
         .btn-container {
             position: relative;
@@ -290,47 +253,42 @@
         }
 
         .btn-inner {
-            background: linear-gradient(110deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top-color: rgba(255, 255, 255, 0.9);
-            border-left-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 
-                inset 0 4px 10px rgba(255, 255, 255, 0.8), 
-                inset 0 -4px 10px rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.9), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             padding: 20px 50px;
             display: flex;
             align-items: center;
             gap: 20px;
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
             position: relative;
             overflow: hidden;
             transform: translate3d(0,0,0);
             transition: all 0.4s ease;
         }
 
-        /* Odbicie światła na przycisku */
         .btn-inner::after {
             content: '';
             position: absolute;
             top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
             transform: skewX(-20deg);
             transition: 0.5s;
         }
 
         .btn-container:hover {
             transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 30px 60px -12px rgba(5, 196, 107, 0.4);
+            box-shadow: 0 30px 60px -12px rgba(5, 196, 107, 0.35);
         }
         
         .btn-container:hover .btn-inner {
-            background: linear-gradient(110deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.25) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
             border-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 
-                inset 0 4px 15px rgba(255, 255, 255, 1), 
-                inset 0 -4px 10px rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 1), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
         }
 
         .btn-container:hover .btn-inner::after {
@@ -344,14 +302,38 @@
             transform: scale(1.2) rotate(15deg);
         }
 
-        /* Szklane ikony wewnątrz przycisku */
-        .glass-icon-wrapper {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 100%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 
-                0 4px 10px rgba(0,0,0,0.05),
-                inset 0 2px 4px rgba(255,255,255,0.9);
+        /* --- ZAKŁADKI (TABS) --- */
+        .tab-slider {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .glass-tab-container {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-slider {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+            box-shadow: 0 8px 25px rgba(5, 196, 107, 0.2), 
+                        inset 0 2px 5px rgba(255, 255, 255, 0.9), 
+                        inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+        }
+        
+        .dynamic-text {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .fade-out-text {
+            opacity: 0;
+            transform: scale(0.98);
         }
 
         /* --- INFO PILL --- */
@@ -359,80 +341,56 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             padding: 8px 24px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
             color: #555;
-            box-shadow: 
-                0 8px 20px rgba(0,0,0,0.04),
-                inset 0 1px 3px rgba(255,255,255,0.6);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            backdrop-filter: blur(8px);
         }
 
-        /* --- MODAL --- */
+        /* --- MODAL (Klasyczny czysty wygląd) --- */
         .modal-overlay {
             opacity: 0;
             pointer-events: none;
             transition: all 0.5s ease;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(0px);
         }
         .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(12px);
         }
         
-        /* Modal wyciągnięty na prawdziwe szkło */
         .modal-window {
             transform: scale(0.8) translateY(50px);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #fff;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(100, 100, 100, 0.2);
             width: 90%; max-width: 420px;
             overflow: hidden;
             color: #333;
-            border-radius: 40px;
         }
         .modal-overlay.active .modal-window {
             transform: scale(1) translateY(0);
             opacity: 1;
         }
 
-        /* Wewnętrzna karta dla modala (szkło) */
-        .modal-glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-top-color: rgba(255, 255, 255, 0.9);
-            border-left-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 
-                0 30px 60px -12px rgba(0, 0, 0, 0.15),
-                inset 0 4px 15px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Elementy wewnątrz modala */
-        .modal-inner-box {
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.7);
-            backdrop-filter: blur(10px);
-        }
-
         .progress-track {
-            background: rgba(255, 255, 255, 0.5);
+            background: #eee;
             border-radius: 20px;
-            height: 10px;
+            height: 8px;
             overflow: hidden;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.1), 0 1px 1px rgba(255,255,255,0.8);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
         .progress-fill {
             width: 0%; height: 100%;
@@ -441,21 +399,11 @@
             border-radius: 20px;
             transition: width 0.1s linear;
             animation: moveStripes 1s linear infinite;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
         }
 
         @keyframes moveStripes {
             0% { background-position: 0 0; }
             100% { background-position: 20px 0; }
-        }
-
-        .dynamic-text {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        
-        .fade-out-text {
-            opacity: 0;
-            transform: scale(0.98);
         }
 
         /* --- CANVAS --- */
@@ -467,19 +415,38 @@
             z-index: 2; pointer-events: none; 
         }
 
+        /* --- ARCHIWUM SCROLLBAR --- */
+        #archive-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        #archive-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #archive-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col items-center justify-center">
 
-    <!-- INITIAL LOADER SCREEN -->
+    <!-- INITIAL LOADER SCREEN (PŁYNNY POSTĘP) -->
     <div id="initial-loader">
-        <div class="loader-icon-wrapper">
+        <div class="loader-icon-wrapper relative z-10">
             <div class="loader-ring"></div>
-            <div class="loader-center-icon">
-                <i data-lucide="sprout" class="w-8 h-8 text-emerald-500"></i>
+            <!-- Wewnętrzna kręcąca się roślinka -->
+            <i data-lucide="flower-2" class="w-10 h-10 text-emerald-500 animate-spin-slow"></i>
+        </div>
+        <div class="loader-text relative z-10">Wiosna budzi się do życia...</div>
+        
+        <!-- Pasek i procenty -->
+        <div class="flex flex-col items-center mt-4 relative z-10">
+            <div id="loader-percent" class="text-3xl font-black text-gray-800 tracking-tighter mb-3 font-outfit">0%</div>
+            <div class="loader-progress-container">
+                <div id="loader-fill" class="loader-progress-fill"></div>
             </div>
         </div>
-        <div class="loader-text">Wiosna budzi się do życia...</div>
     </div>
 
     <!-- Warstwy Tła -->
@@ -492,28 +459,26 @@
     <div id="cursor-glow"></div>
 
     <!-- Główna Zawartość -->
-    <main class="relative z-10 flex flex-col items-center text-center select-none w-full max-w-5xl px-6">
+    <main class="relative z-10 flex flex-col items-center text-center select-none w-full max-w-5xl px-6 max-h-[100vh] overflow-y-auto pb-10">
         
         <!-- Header -->
-        <div class="relative mb-8 animate-enter">
-            <!-- Rozmyta, lekka poświata pod tekstem -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/40 blur-[80px] rounded-full pointer-events-none"></div>
+        <div class="relative mb-8 mt-10 animate-enter">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/50 blur-[60px] rounded-full pointer-events-none"></div>
             
             <h2 class="subtitle-hand mb-2">Prawdziwa Wiosna!</h2>
-            <h1 class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
+            <h1 id="btn-text" class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
             
-            <!-- Dynamiczna Plakietka Wersji (Zaktualizowany szklany efekt) -->
-            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full badge-glass dynamic-text w-[240px] justify-center relative">
+            <!-- Dynamiczna Plakietka Wersji -->
+            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 border border-white/50 shadow-[0_8px_32px_rgba(255,255,255,0.2),inset_0_2px_5px_rgba(255,255,255,0.8)] backdrop-blur-xl dynamic-text w-[240px] justify-center">
                 <div id="version-icon-wrapper" class="w-5 h-5 flex items-center justify-center shrink-0">
                     <i id="version-icon" data-lucide="flower-2" class="w-4 h-4 text-pink-500 animate-spin-slow"></i>
                 </div>
-                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-800 drop-shadow-sm whitespace-nowrap">Wersja 1.5</span>
+                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-700 drop-shadow-sm whitespace-nowrap">Wersja 1.5</span>
             </div>
         </div>
 
         <!-- System Zakładek (Tabs) -->
         <div class="glass-tab-container p-1.5 rounded-full flex items-center relative z-20 mb-8 animate-enter delay-100">
-            <!-- Pływające tło zakładki -->
             <div id="tab-slider" class="tab-slider glass-slider absolute left-1.5 top-1.5 bottom-1.5 w-[calc(50%-0.375rem)] rounded-full pointer-events-none"></div>
             
             <button onclick="switchTab('stable')" id="tab-btn-stable" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-emerald-600 transition-colors duration-300">
@@ -525,23 +490,20 @@
         </div>
 
         <!-- Sekcja Przycisku -->
-        <div class="flex flex-col items-center gap-8 w-full animate-enter delay-200">
+        <div class="flex flex-col items-center gap-6 w-full animate-enter delay-200">
             
             <button class="btn-container group cursor-pointer" onclick="openDownloadModal()">
                 <div class="btn-inner">
-                    <!-- Szklana Ikona -->
-                    <div class="icon-bounce p-3 glass-icon-wrapper rounded-2xl flex items-center justify-center relative z-10">
+                    <div class="icon-bounce p-3 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] flex items-center justify-center">
                         <i data-lucide="sun" class="w-8 h-8 text-yellow-500 drop-shadow-md"></i>
                     </div>
                     
-                    <!-- Dynamiczny tekst przycisku -->
-                    <div class="text-left dynamic-text w-[300px] relative z-10" id="btn-text-wrapper">
+                    <div class="text-left dynamic-text w-[300px]" id="btn-text-wrapper">
                         <div id="btn-subtext" class="text-[10px] text-gray-600 font-bold tracking-[0.2em] uppercase mb-1 drop-shadow-sm truncate">Dostępne wyłącznie na Windows 11</div>
-                        <div id="btn-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-emerald-600 transition-colors whitespace-nowrap">POBIERZ TERAZ</div>
+                        <div id="btn-title-text" class="text-2xl font-black text-gray-800 tracking-wide font-outfit drop-shadow-md group-hover:text-emerald-600 transition-colors whitespace-nowrap">POBIERZ TERAZ</div>
                     </div>
 
-                    <!-- Szklana Strzałka -->
-                    <div class="glass-icon-wrapper p-2 rounded-full flex items-center justify-center shrink-0 relative z-10">
+                    <div class="bg-white/40 backdrop-blur-md border border-white/60 p-2 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center shrink-0">
                         <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition-transform drop-shadow-sm"></i>
                     </div>
                 </div>
@@ -549,60 +511,121 @@
             
             <!-- Rozmiar -->
             <div class="info-pill animate-enter delay-300 dynamic-text w-[200px] justify-center" id="size-wrapper">
-                <i data-lucide="cloud-download" class="w-4 h-4 text-emerald-500 shrink-0 drop-shadow-sm"></i>
-                <span class="uppercase font-bold text-gray-700 whitespace-nowrap drop-shadow-sm">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">55.2 MB</span></span>
+                <i data-lucide="cloud-download" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span class="uppercase font-bold text-gray-600 whitespace-nowrap">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">55.2 MB</span></span>
+            </div>
+
+            <!-- Archiwum Wersji (Rozwijane) -->
+            <div class="w-full max-w-[420px] animate-enter delay-400 mt-2">
+                <button onclick="toggleArchive()" class="mx-auto flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-emerald-600 transition-colors uppercase tracking-widest px-4 py-2 rounded-full hover:bg-white/30 backdrop-blur-sm border border-transparent hover:border-white/50">
+                    <i data-lucide="archive" class="w-4 h-4"></i>
+                    Archiwum starszych wersji
+                    <i data-lucide="chevron-down" id="archive-chevron" class="w-4 h-4 transition-transform duration-300"></i>
+                </button>
+
+                <div id="archive-list" class="overflow-y-auto max-h-0 opacity-0 transition-all duration-500 ease-in-out">
+                    <div class="bg-white/40 backdrop-blur-md border border-white/60 rounded-3xl p-3 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] mt-3 flex flex-col gap-2">
+                        
+                        <!-- Wersja 1.2 -->
+                        <button onclick="openDownloadModal('themaze1_2_archive.zip', 'Archiwum - Wersja 1.2')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
+                                    <i data-lucide="history" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-800">Wersja 1.2</div>
+                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_2_archive.zip</div>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </div>
+                        </button>
+
+                        <!-- Wersja 1.1 -->
+                        <button onclick="openDownloadModal('themaze1_1_archive.zip', 'Archiwum - Wersja 1.1')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
+                                    <i data-lucide="history" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-800">Wersja 1.1</div>
+                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_1_archive.zip</div>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </div>
+                        </button>
+
+                        <!-- Wersja 1.0 -->
+                        <button onclick="openDownloadModal('themaze1_0_archive.zip', 'Archiwum - Wersja 1.0')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
+                                    <i data-lucide="history" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-800">Wersja 1.0</div>
+                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_0_archive.zip</div>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </div>
+                        </button>
+
+                    </div>
+                </div>
             </div>
 
         </div>
     </main>
 
-    <!-- Modal Instalatora (Prawdziwe Szkło) -->
+    <!-- Modal Instalatora (Klasyczny czysty wygląd + Przycisk Anuluj) -->
     <div id="modalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-window relative">
+        <div class="modal-window p-8 relative">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-green-200/50 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-200/50 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex justify-between items-center mb-6 relative z-10">
+                <h3 class="text-xl font-bold text-gray-800 tracking-tight">Instalator</h3>
+                <button onclick="cancelDownload()" class="p-2 hover:bg-gray-100 rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+            </div>
+
+            <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-8 relative z-10 shadow-inner">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-gray-100">
+                    <i id="modal-icon" data-lucide="package" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div id="modal-filename" class="text-base font-bold text-gray-800 truncate max-w-[200px]">themaze.zip</div>
+                    <div id="modal-filedesc" class="text-xs text-gray-500 font-medium truncate max-w-[200px]">Oficjalny pakiet instalacyjny</div>
+                </div>
+            </div>
+
+            <div class="flex justify-between text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-2 relative z-10">
+                <span id="statusText">Gotowy do startu</span>
+                <span id="percentText" class="text-emerald-600 font-black">0%</span>
+            </div>
             
-            <!-- Tło wewnętrzne modalna zapewniające szklany błysk -->
-            <div class="modal-glass-card p-8 w-full h-full relative overflow-hidden rounded-[40px]">
-                
-                <!-- Kolorowe plamy pod szkłem potęgujące efekt -->
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-green-300/40 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-300/40 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="progress-track w-full mb-3 relative z-10">
+                <div id="progressBar" class="progress-fill"></div>
+            </div>
 
-                <div class="flex justify-between items-center mb-6 relative z-10">
-                    <h3 class="text-xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Instalator</h3>
-                    <button onclick="closeModal()" class="p-2 hover:bg-white/40 bg-white/20 border border-white/50 shadow-sm backdrop-blur-md rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5 text-gray-600"></i></button>
-                </div>
+            <!-- Przycisk Anuluj pobieranie -->
+            <div class="flex justify-center relative z-10 h-8">
+                <button id="cancelBtn" onclick="cancelDownload()" class="text-[10px] font-bold text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors py-1 px-4 rounded-full hover:bg-red-50">Anuluj pobieranie</button>
+            </div>
 
-                <div class="flex items-center gap-4 modal-inner-box p-4 rounded-2xl mb-8 relative z-10">
-                    <div class="w-12 h-12 bg-white/60 backdrop-blur-md rounded-xl flex items-center justify-center text-emerald-600 shadow-sm border border-white/80">
-                        <i data-lucide="package" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <div id="modal-filename" class="text-base font-bold text-gray-800 drop-shadow-sm">themaze.zip</div>
-                        <div id="modal-filedesc" class="text-xs text-gray-600 font-medium drop-shadow-sm">Oficjalny pakiet instalacyjny</div>
+            <div id="successMsg" class="absolute inset-0 bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center z-20 transition-all duration-500 opacity-0 pointer-events-none translate-y-4 rounded-[40px]">
+                <div class="relative mb-4">
+                     <div class="absolute inset-0 bg-green-200 blur-xl opacity-50 rounded-full"></div>
+                     <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-500 border border-green-100 relative z-10">
+                        <i data-lucide="check-circle" class="w-8 h-8"></i>
                     </div>
                 </div>
-
-                <div class="flex justify-between text-[11px] text-gray-600 font-bold uppercase tracking-widest mb-2 relative z-10 drop-shadow-sm">
-                    <span id="statusText">Gotowy do startu</span>
-                    <span id="percentText" class="text-emerald-700 font-black">0%</span>
-                </div>
-                
-                <div class="progress-track w-full mb-6 relative z-10">
-                    <div id="progressBar" class="progress-fill"></div>
-                </div>
-
-                <div id="successMsg" class="absolute inset-0 bg-white/80 backdrop-blur-2xl flex flex-col items-center justify-center z-20 transition-all duration-500 opacity-0 pointer-events-none translate-y-4">
-                    <div class="relative mb-4">
-                         <div class="absolute inset-0 bg-green-300 blur-xl opacity-60 rounded-full"></div>
-                         <div class="w-16 h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-full flex items-center justify-center text-green-500 border border-green-200 relative z-10 shadow-inner">
-                            <i data-lucide="check-circle" class="w-8 h-8"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-gray-800 font-black text-xl mb-1 drop-shadow-sm">Sukces!</h3>
-                    <p class="text-gray-600 text-xs font-bold uppercase tracking-widest mb-6 drop-shadow-sm">Pobieranie rozpoczęte</p>
-                    <button onclick="closeModal()" class="px-8 py-3 rounded-full bg-gray-900 text-white text-xs font-bold tracking-widest uppercase hover:bg-gray-800 hover:scale-105 transition-all shadow-xl shadow-gray-900/20">Zamknij</button>
-                </div>
-
+                <h3 class="text-gray-800 font-black text-xl mb-1">Sukces!</h3>
+                <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Pobieranie rozpoczęte</p>
+                <button onclick="closeModal()" class="px-8 py-3 rounded-full bg-gray-900 text-white text-xs font-bold tracking-widest uppercase hover:bg-gray-800 hover:scale-105 transition-all shadow-lg">Zamknij</button>
             </div>
         </div>
     </div>
@@ -634,6 +657,7 @@
         };
 
         let currentVersion = 'stable';
+        let currentDownloadTarget = null; // Trzyma informacje o obecnie wybranym pliku
 
         function switchTab(ver) {
             if (currentVersion === ver) return;
@@ -669,17 +693,15 @@
                 iconWrapper.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4 ${data.badgeColor} ${data.iconClass}"></i>`;
                 lucide.createIcons(); 
 
-                document.getElementById('btn-text').innerText = data.btnMain;
+                document.getElementById('btn-title-text').innerText = data.btnMain;
                 document.getElementById('btn-subtext').innerText = data.btnSub;
                 document.getElementById('size-text').innerText = data.size;
-
-                document.getElementById('modal-filename').innerText = data.file;
-                document.getElementById('modal-filedesc').innerText = data.modalDesc;
 
                 dynamicTexts.forEach(el => el.classList.remove('fade-out-text'));
             }, 300);
         }
 
+        /* --- OBSŁUGA LOADERA WEJŚCIOWEGO --- */
         const windowLoaded = new Promise(resolve => {
             if (document.readyState === 'complete') {
                 resolve();
@@ -690,17 +712,30 @@
 
         Promise.all([windowLoaded, document.fonts.ready]).then(() => {
             const loader = document.getElementById('initial-loader');
-            setTimeout(() => {
-                requestAnimationFrame(() => {
-                    loader.classList.add('fade-out');
+            const percentEl = document.getElementById('loader-percent');
+            const fillEl = document.getElementById('loader-fill');
+            
+            let progress = 0;
+            const initInterval = setInterval(() => {
+                progress += Math.random() * 2 + 1; 
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(initInterval);
+                    
                     setTimeout(() => {
+                        loader.classList.add('fade-out');
                         document.body.classList.add('loaded');
-                    }, 100); 
-                    setTimeout(() => {
-                        if (loader.parentNode) loader.remove();
-                    }, 500); 
-                });
-            }, 1200);
+                        
+                        setTimeout(() => {
+                            if (loader.parentNode) loader.remove();
+                        }, 800);
+                    }, 200);
+                }
+                
+                percentEl.innerText = Math.floor(progress) + '%';
+                fillEl.style.width = progress + '%';
+                
+            }, 35);
         });
 
         lucide.createIcons();
@@ -720,29 +755,78 @@
         }
         updateCursor();
 
-        /* DOWNLOAD LOGIC */
+        /* ARCHIWUM LOGIC */
+        function toggleArchive() {
+            const list = document.getElementById('archive-list');
+            const chevron = document.getElementById('archive-chevron');
+            
+            if (list.classList.contains('max-h-0')) {
+                list.classList.remove('max-h-0', 'opacity-0');
+                list.classList.add('max-h-[350px]', 'opacity-100'); // Dostosowane do max 3 elementow
+                chevron.classList.add('rotate-180');
+            } else {
+                list.classList.add('max-h-0', 'opacity-0');
+                list.classList.remove('max-h-[350px]', 'opacity-100');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        /* DOWNLOAD LOGIC Z OBSŁUGĄ ARCHIWUM */
         const modalOverlay = document.getElementById('modalOverlay');
         const progressBar = document.getElementById('progressBar');
         const percentText = document.getElementById('percentText');
         const statusText = document.getElementById('statusText');
         const successMsg = document.getElementById('successMsg');
+        const cancelBtn = document.getElementById('cancelBtn');
         let isDownloading = false;
+        let downloadInterval;
 
-        function openDownloadModal() {
+        // openDownloadModal przyjmuje teraz opcjonalne parametry. Jeśli ich nie ma, bierze stabilną/betę.
+        function openDownloadModal(customFile = null, customDesc = null) {
             if (isDownloading) return;
             isDownloading = true;
+
+            // Przygotowanie danych do wyświetlenia w modalu
+            if (customFile) {
+                currentDownloadTarget = { file: customFile, desc: customDesc };
+                document.getElementById('modal-filename').innerText = customFile;
+                document.getElementById('modal-filedesc').innerText = customDesc;
+                document.getElementById('modal-icon').setAttribute('data-lucide', 'archive');
+            } else {
+                const data = gameVersions[currentVersion];
+                currentDownloadTarget = { file: data.file, desc: data.modalDesc };
+                document.getElementById('modal-filename').innerText = data.file;
+                document.getElementById('modal-filedesc').innerText = data.modalDesc;
+                document.getElementById('modal-icon').setAttribute('data-lucide', 'package');
+            }
+            
+            // Odswiezenie icon jesli trzeba (np zmiana z package na archive)
+            lucide.createIcons();
+
             modalOverlay.classList.add('active');
+            cancelBtn.style.display = 'block';
             
             let progress = 0;
-            const interval = setInterval(() => {
+            downloadInterval = setInterval(() => {
                 progress += Math.random() * 3 + 1;
                 if (progress >= 100) {
                     progress = 100;
-                    clearInterval(interval);
+                    clearInterval(downloadInterval);
                     finishDownload();
                 }
                 updateUI(progress);
             }, 50);
+        }
+
+        function cancelDownload() {
+            if (!isDownloading) {
+                closeModal();
+                return;
+            }
+            clearInterval(downloadInterval);
+            isDownloading = false;
+            statusText.innerText = "Pobieranie przerwane";
+            closeModal();
         }
 
         function closeModal() {
@@ -767,17 +851,25 @@
 
         function finishDownload() {
             statusText.innerText = "Gotowe!";
+            cancelBtn.style.display = 'none';
+            
             setTimeout(() => {
                 successMsg.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
                 successMsg.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
                 
-                const fileToDownload = gameVersions[currentVersion].file;
+                // Wykorzystanie zmiennej z przechwyconym plikiem docelowym (main lub archiwum)
+                const fileToDownload = currentDownloadTarget.file;
+                const blob = new Blob(["To jest testowy plik instalacyjny pobrany ze strony The Maze. Plik docelowy: " + fileToDownload], { type: "application/octet-stream" });
+                const blobUrl = URL.createObjectURL(blob);
+                
                 const link = document.createElement('a');
-                link.href = fileToDownload;
+                link.href = blobUrl;
                 link.download = fileToDownload;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
                 
             }, 400);
         }
