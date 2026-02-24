@@ -415,16 +415,71 @@
             z-index: 2; pointer-events: none; 
         }
 
-        /* --- ARCHIWUM SCROLLBAR --- */
-        #archive-list::-webkit-scrollbar {
-            width: 6px;
+        /* --- NO SCROLLBAR UTILITY --- */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        #archive-list::-webkit-scrollbar-track {
-            background: transparent;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        #archive-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
+
+        /* --- PŁYWAJĄCY PRZYCISK SZKLANY (ZAWSZE WIDOCZNY W ROGU) --- */
+        .btn-container-archive {
+            border-radius: 50px;
+            box-shadow: 0 15px 35px -5px rgba(5, 196, 107, 0.2); 
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+
+        .btn-inner-archive {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.9), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 8px 18px 8px 8px; /* asymetryczny padding ze względu na okrągłą ikonkę z lewej */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            position: relative;
+            overflow: hidden;
+            transform: translate3d(0,0,0);
+            transition: all 0.4s ease;
+        }
+
+        /* Szklany połysk przelatujący przez przycisk na hover */
+        .btn-inner-archive::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn-container-archive:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 20px 40px -8px rgba(5, 196, 107, 0.3);
+        }
+        
+        .btn-container-archive:hover .btn-inner-archive {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 1), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-container-archive:hover .btn-inner-archive::after {
+            left: 150%;
+        }
+
+        .icon-bounce-archive {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-container-archive:hover .icon-bounce-archive {
+            transform: scale(1.15) rotate(10deg);
         }
 
     </style>
@@ -458,8 +513,19 @@
     <div class="vignette"></div>
     <div id="cursor-glow"></div>
 
+    <!-- Pływający Przycisk Archiwum -->
+    <div onclick="openArchiveModal()" class="fixed top-6 right-6 lg:top-8 lg:right-8 z-40 btn-container-archive group cursor-pointer">
+        <div class="btn-inner-archive">
+            <!-- Dodatkowa szklana obwódka dla samej ikony (jak w głównym przycisku) -->
+            <div class="w-10 h-10 bg-white/40 backdrop-blur-md border border-white/60 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] rounded-full flex items-center justify-center shrink-0 icon-bounce-archive">
+                <i data-lucide="archive" class="w-5 h-5 text-emerald-600 drop-shadow-md"></i>
+            </div>
+            <span class="text-xs font-black text-gray-800 uppercase tracking-widest drop-shadow-sm pr-2">Archiwum</span>
+        </div>
+    </div>
+
     <!-- Główna Zawartość -->
-    <main class="relative z-10 flex flex-col items-center text-center select-none w-full max-w-5xl px-6 max-h-[100vh] overflow-y-auto pb-10">
+    <main class="relative z-10 flex flex-col items-center text-center select-none w-full max-w-5xl px-6 max-h-[100vh] overflow-y-auto pb-10 no-scrollbar">
         
         <!-- Header -->
         <div class="relative mb-8 mt-10 animate-enter">
@@ -515,69 +581,6 @@
                 <span class="uppercase font-bold text-gray-600 whitespace-nowrap">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">55.2 MB</span></span>
             </div>
 
-            <!-- Archiwum Wersji (Rozwijane) -->
-            <div class="w-full max-w-[420px] animate-enter delay-400 mt-2">
-                <button onclick="toggleArchive()" class="mx-auto flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-emerald-600 transition-colors uppercase tracking-widest px-4 py-2 rounded-full hover:bg-white/30 backdrop-blur-sm border border-transparent hover:border-white/50">
-                    <i data-lucide="archive" class="w-4 h-4"></i>
-                    Archiwum starszych wersji
-                    <i data-lucide="chevron-down" id="archive-chevron" class="w-4 h-4 transition-transform duration-300"></i>
-                </button>
-
-                <div id="archive-list" class="overflow-y-auto max-h-0 opacity-0 transition-all duration-500 ease-in-out">
-                    <div class="bg-white/40 backdrop-blur-md border border-white/60 rounded-3xl p-3 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] mt-3 flex flex-col gap-2">
-                        
-                        <!-- Wersja 1.2 -->
-                        <button onclick="openDownloadModal('themaze1_2_archive.zip', 'Archiwum - Wersja 1.2')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
-                                    <i data-lucide="history" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-bold text-gray-800">Wersja 1.2</div>
-                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_2_archive.zip</div>
-                                </div>
-                            </div>
-                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </div>
-                        </button>
-
-                        <!-- Wersja 1.1 -->
-                        <button onclick="openDownloadModal('themaze1_1_archive.zip', 'Archiwum - Wersja 1.1')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
-                                    <i data-lucide="history" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-bold text-gray-800">Wersja 1.1</div>
-                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_1_archive.zip</div>
-                                </div>
-                            </div>
-                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </div>
-                        </button>
-
-                        <!-- Wersja 1.0 -->
-                        <button onclick="openDownloadModal('themaze1_0_archive.zip', 'Archiwum - Wersja 1.0')" class="flex items-center justify-between p-3 rounded-2xl hover:bg-white/60 border border-transparent hover:border-white/90 transition-all group w-full text-left">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 bg-white/50 shadow-sm border border-white/80 rounded-xl flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
-                                    <i data-lucide="history" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-bold text-gray-800">Wersja 1.0</div>
-                                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">themaze1_0_archive.zip</div>
-                                </div>
-                            </div>
-                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </div>
-                        </button>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -626,6 +629,76 @@
                 <h3 class="text-gray-800 font-black text-xl mb-1">Sukces!</h3>
                 <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Pobieranie rozpoczęte</p>
                 <button onclick="closeModal()" class="px-8 py-3 rounded-full bg-gray-900 text-white text-xs font-bold tracking-widest uppercase hover:bg-gray-800 hover:scale-105 transition-all shadow-lg">Zamknij</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Archiwum -->
+    <div id="archiveModalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-window p-6 relative w-full max-w-[480px]">
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-pink-200/40 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex justify-between items-center mb-6 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 border border-emerald-100/50 shadow-sm">
+                        <i data-lucide="archive" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-gray-800 tracking-tight font-outfit uppercase">Archiwum wersji</h3>
+                </div>
+                <button onclick="closeArchiveModal()" class="p-2 hover:bg-gray-100 rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+            </div>
+
+            <!-- Lista plików w archiwum bez scrollbara wizualnego -->
+            <div class="flex flex-col gap-3 max-h-[50vh] overflow-y-auto no-scrollbar relative z-10 pb-2">
+                
+                <!-- Wersja 1.0 -->
+                <button onclick="downloadFromArchive('themaze1_0_archive.zip', 'Archiwum - Wersja 1.0')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                            <i data-lucide="history" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.0</div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_0_archive.zip</div>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                    </div>
+                </button>
+
+                <!-- Wersja 1.1 -->
+                <button onclick="downloadFromArchive('themaze1_1_archive.zip', 'Archiwum - Wersja 1.1')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                            <i data-lucide="history" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.1</div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_1_archive.zip</div>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                    </div>
+                </button>
+
+                <!-- Wersja 1.2 -->
+                <button onclick="downloadFromArchive('themaze1_2_archive.zip', 'Archiwum - Wersja 1.2')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                            <i data-lucide="history" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.2</div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_2_archive.zip</div>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                    </div>
+                </button>
+
             </div>
         </div>
     </div>
@@ -755,20 +828,22 @@
         }
         updateCursor();
 
-        /* ARCHIWUM LOGIC */
-        function toggleArchive() {
-            const list = document.getElementById('archive-list');
-            const chevron = document.getElementById('archive-chevron');
-            
-            if (list.classList.contains('max-h-0')) {
-                list.classList.remove('max-h-0', 'opacity-0');
-                list.classList.add('max-h-[350px]', 'opacity-100'); // Dostosowane do max 3 elementow
-                chevron.classList.add('rotate-180');
-            } else {
-                list.classList.add('max-h-0', 'opacity-0');
-                list.classList.remove('max-h-[350px]', 'opacity-100');
-                chevron.classList.remove('rotate-180');
-            }
+        /* ARCHIVE MODAL LOGIC */
+        const archiveModalOverlay = document.getElementById('archiveModalOverlay');
+
+        function openArchiveModal() {
+            archiveModalOverlay.classList.add('active');
+        }
+
+        function closeArchiveModal() {
+            archiveModalOverlay.classList.remove('active');
+        }
+
+        function downloadFromArchive(file, desc) {
+            closeArchiveModal();
+            setTimeout(() => {
+                openDownloadModal(file, desc);
+            }, 400); // Czeka aż modal archiwum się zamknie przed otwarciem pobierania
         }
 
         /* DOWNLOAD LOGIC Z OBSŁUGĄ ARCHIWUM */
