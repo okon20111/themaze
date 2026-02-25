@@ -596,7 +596,7 @@
             </div>
 
             <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-8 relative z-10 shadow-inner">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-gray-100">
+                <div id="modal-icon-wrapper" class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-gray-100">
                     <i id="modal-icon" data-lucide="package" class="w-6 h-6"></i>
                 </div>
                 <div>
@@ -731,14 +731,32 @@
 
         let currentVersion = 'stable';
         let currentDownloadTarget = null; // Trzyma informacje o obecnie wybranym pliku
+        let tabSwitchTimeout = null;
+
+        const slider = document.getElementById('tab-slider');
+        const tabStable = document.getElementById('tab-btn-stable');
+        const tabBeta = document.getElementById('tab-btn-beta');
+        const versionBadge = document.getElementById('version-badge');
+        const versionIconWrapper = document.getElementById('version-icon-wrapper');
+        const btnTitleText = document.getElementById('btn-title-text');
+        const btnSubtext = document.getElementById('btn-subtext');
+        const sizeText = document.getElementById('size-text');
+        const dynamicTexts = document.querySelectorAll('.dynamic-text');
+
+        function renderDynamicIcon(target, iconName, className, id = null) {
+            const iconDefinition = lucide.icons && lucide.icons[iconName];
+            if (!target || !iconDefinition) return false;
+
+            const attrs = { class: className };
+            if (id) attrs.id = id;
+
+            target.innerHTML = iconDefinition.toSvg(attrs);
+            return true;
+        }
 
         function switchTab(ver) {
             if (currentVersion === ver) return;
             currentVersion = ver;
-
-            const slider = document.getElementById('tab-slider');
-            const tabStable = document.getElementById('tab-btn-stable');
-            const tabBeta = document.getElementById('tab-btn-beta');
 
             if (ver === 'stable') {
                 slider.style.transform = 'translateX(0)';
@@ -754,23 +772,34 @@
                 tabStable.classList.add('hover:text-gray-800');
             }
 
-            const dynamicTexts = document.querySelectorAll('.dynamic-text');
             dynamicTexts.forEach(el => el.classList.add('fade-out-text'));
 
-            setTimeout(() => {
+            if (tabSwitchTimeout !== null) {
+                clearTimeout(tabSwitchTimeout);
+            }
+
+            tabSwitchTimeout = setTimeout(() => {
                 const data = gameVersions[ver];
                 
-                document.getElementById('version-badge').innerText = data.badge;
+                versionBadge.innerText = data.badge;
                 
-                const iconWrapper = document.getElementById('version-icon-wrapper');
-                iconWrapper.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4 ${data.badgeColor} ${data.iconClass}"></i>`;
-                lucide.createIcons(); 
+                const versionIconRendered = renderDynamicIcon(
+                    versionIconWrapper,
+                    data.icon,
+                    `w-4 h-4 ${data.badgeColor} ${data.iconClass}`,
+                    'version-icon'
+                );
+                if (!versionIconRendered) {
+                    versionIconWrapper.innerHTML = `<i id="version-icon" data-lucide="${data.icon}" class="w-4 h-4 ${data.badgeColor} ${data.iconClass}"></i>`;
+                    lucide.createIcons();
+                }
 
-                document.getElementById('btn-title-text').innerText = data.btnMain;
-                document.getElementById('btn-subtext').innerText = data.btnSub;
-                document.getElementById('size-text').innerText = data.size;
+                btnTitleText.innerText = data.btnMain;
+                btnSubtext.innerText = data.btnSub;
+                sizeText.innerText = data.size;
 
                 dynamicTexts.forEach(el => el.classList.remove('fade-out-text'));
+                tabSwitchTimeout = null;
             }, 300);
         }
 
@@ -783,7 +812,9 @@
             }
         });
 
-        Promise.all([windowLoaded, document.fonts.ready]).then(() => {
+        const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+
+        Promise.all([windowLoaded, fontsReady]).then(() => {
             const loader = document.getElementById('initial-loader');
             const percentEl = document.getElementById('loader-percent');
             const fillEl = document.getElementById('loader-fill');
@@ -815,18 +846,44 @@
 
         /* SPOTLIGHT */
         const cursorGlow = document.getElementById('cursor-glow');
-        let mouseX = -1000, mouseY = -1000;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        let cursorX = -1000;
+        let cursorY = -1000;
+        let cursorTargetX = -1000;
+        let cursorTargetY = -1000;
+        let cursorFrame = null;
 
-        function updateCursor() {
-            cursorGlow.style.transform = `translate3d(${mouseX - 400}px, ${mouseY - 400}px, 0)`;
-            requestAnimationFrame(updateCursor);
+        function cursorNeedsUpdate() {
+            return Math.abs(cursorTargetX - cursorX) > 0.5 || Math.abs(cursorTargetY - cursorY) > 0.5;
         }
-        updateCursor();
+
+        function renderCursorFrame() {
+            cursorFrame = null;
+
+            cursorX += (cursorTargetX - cursorX) * 0.22;
+            cursorY += (cursorTargetY - cursorY) * 0.22;
+
+            if (!cursorNeedsUpdate()) {
+                cursorX = cursorTargetX;
+                cursorY = cursorTargetY;
+            }
+
+            cursorGlow.style.transform = `translate3d(${cursorX - 400}px, ${cursorY - 400}px, 0)`;
+
+            if (!document.hidden && cursorNeedsUpdate()) {
+                cursorFrame = requestAnimationFrame(renderCursorFrame);
+            }
+        }
+
+        function scheduleCursorFrame() {
+            if (document.hidden || cursorFrame !== null) return;
+            cursorFrame = requestAnimationFrame(renderCursorFrame);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            cursorTargetX = e.clientX;
+            cursorTargetY = e.clientY;
+            scheduleCursorFrame();
+        }, { passive: true });
 
         /* ARCHIVE MODAL LOGIC */
         const archiveModalOverlay = document.getElementById('archiveModalOverlay');
@@ -853,8 +910,15 @@
         const statusText = document.getElementById('statusText');
         const successMsg = document.getElementById('successMsg');
         const cancelBtn = document.getElementById('cancelBtn');
+        const modalIconWrapper = document.getElementById('modal-icon-wrapper');
         let isDownloading = false;
         let downloadInterval;
+
+        function clearDownloadInterval() {
+            if (!downloadInterval) return;
+            clearInterval(downloadInterval);
+            downloadInterval = null;
+        }
 
         // openDownloadModal przyjmuje teraz opcjonalne parametry. Jeśli ich nie ma, bierze stabilną/betę.
         function openDownloadModal(customFile = null, customDesc = null) {
@@ -866,27 +930,33 @@
                 currentDownloadTarget = { file: customFile, desc: customDesc };
                 document.getElementById('modal-filename').innerText = customFile;
                 document.getElementById('modal-filedesc').innerText = customDesc;
-                document.getElementById('modal-icon').setAttribute('data-lucide', 'archive');
+                const archiveIconRendered = renderDynamicIcon(modalIconWrapper, 'archive', 'w-6 h-6', 'modal-icon');
+                if (!archiveIconRendered) {
+                    document.getElementById('modal-icon').setAttribute('data-lucide', 'archive');
+                    lucide.createIcons();
+                }
             } else {
                 const data = gameVersions[currentVersion];
                 currentDownloadTarget = { file: data.file, desc: data.modalDesc };
                 document.getElementById('modal-filename').innerText = data.file;
                 document.getElementById('modal-filedesc').innerText = data.modalDesc;
-                document.getElementById('modal-icon').setAttribute('data-lucide', 'package');
+                const packageIconRendered = renderDynamicIcon(modalIconWrapper, 'package', 'w-6 h-6', 'modal-icon');
+                if (!packageIconRendered) {
+                    document.getElementById('modal-icon').setAttribute('data-lucide', 'package');
+                    lucide.createIcons();
+                }
             }
-            
-            // Odswiezenie icon jesli trzeba (np zmiana z package na archive)
-            lucide.createIcons();
 
             modalOverlay.classList.add('active');
             cancelBtn.style.display = 'block';
             
             let progress = 0;
+            clearDownloadInterval();
             downloadInterval = setInterval(() => {
                 progress += Math.random() * 3 + 1;
                 if (progress >= 100) {
                     progress = 100;
-                    clearInterval(downloadInterval);
+                    clearDownloadInterval();
                     finishDownload();
                 }
                 updateUI(progress);
@@ -898,7 +968,7 @@
                 closeModal();
                 return;
             }
-            clearInterval(downloadInterval);
+            clearDownloadInterval();
             isDownloading = false;
             statusText.innerText = "Pobieranie przerwane";
             closeModal();
@@ -906,6 +976,7 @@
 
         function closeModal() {
             modalOverlay.classList.remove('active');
+            clearDownloadInterval();
             setTimeout(() => {
                 isDownloading = false;
                 successMsg.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
@@ -954,10 +1025,24 @@
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
+        let particleFrame = null;
+        let resizeFrame = null;
+        const PARTICLE_COUNT = 70;
+        const TWO_PI = Math.PI * 2;
+        const PINK_COLORS = ['#ff9ff3', '#f8a5c2', '#ffcccc', '#ffb8b8'];
+        const GREEN_COLORS = ['#1dd1a1', '#05c46b', '#badc58', '#b8e994'];
 
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+        }
+
+        function scheduleResize() {
+            if (resizeFrame !== null) return;
+            resizeFrame = requestAnimationFrame(() => {
+                resizeFrame = null;
+                resize();
+            });
         }
 
         class Particle {
@@ -969,14 +1054,12 @@
                 const rand = Math.random();
                 if (rand < 0.4) {
                     this.type = 'petal';
-                    const pinks = ['#ff9ff3', '#f8a5c2', '#ffcccc', '#ffb8b8'];
-                    this.color = pinks[Math.floor(Math.random() * pinks.length)];
+                    this.color = PINK_COLORS[Math.floor(Math.random() * PINK_COLORS.length)];
                     this.size = Math.random() * 5 + 3;
                     this.speedY = Math.random() * 1 + 0.5;
                 } else if (rand < 0.8) {
                     this.type = 'leaf';
-                    const greens = ['#1dd1a1', '#05c46b', '#badc58', '#b8e994'];
-                    this.color = greens[Math.floor(Math.random() * greens.length)];
+                    this.color = GREEN_COLORS[Math.floor(Math.random() * GREEN_COLORS.length)];
                     this.size = Math.random() * 4 + 2;
                     this.speedY = Math.random() * 1.5 + 0.8;
                 } else {
@@ -1028,7 +1111,7 @@
                     gradient.addColorStop(0.4, this.color);
                     gradient.addColorStop(1, 'transparent');
                     ctx.fillStyle = gradient;
-                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.arc(0, 0, this.size, 0, TWO_PI);
                     ctx.fill();
                 }
                 ctx.restore();
@@ -1037,19 +1120,53 @@
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < 70; i++) particles.push(new Particle());
+            for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
         }
 
-        function animate() {
+        function animateParticles() {
             ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
+                particle.update();
+                particle.draw();
+            }
+
+            if (!document.hidden) {
+                particleFrame = requestAnimationFrame(animateParticles);
+            } else {
+                particleFrame = null;
+            }
         }
 
-        window.addEventListener('resize', resize);
+        function startParticleLoop() {
+            if (particleFrame !== null || document.hidden) return;
+            particleFrame = requestAnimationFrame(animateParticles);
+        }
+
+        function stopParticleLoop() {
+            if (particleFrame === null) return;
+            cancelAnimationFrame(particleFrame);
+            particleFrame = null;
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopParticleLoop();
+                if (cursorFrame !== null) {
+                    cancelAnimationFrame(cursorFrame);
+                    cursorFrame = null;
+                }
+                return;
+            }
+
+            startParticleLoop();
+            scheduleCursorFrame();
+        });
+
+        window.addEventListener('resize', scheduleResize, { passive: true });
         resize();
         initParticles();
-        animate();
+        startParticleLoop();
     </script>
 </body>
 </html>
