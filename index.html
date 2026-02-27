@@ -1005,18 +1005,13 @@
                 
                 // Wykorzystanie zmiennej z przechwyconym plikiem docelowym (main lub archiwum)
                 const fileToDownload = currentDownloadTarget.file;
-                const blob = new Blob(["To jest testowy plik instalacyjny pobrany ze strony The Maze. Plik docelowy: " + fileToDownload], { type: "application/octet-stream" });
-                const blobUrl = URL.createObjectURL(blob);
-                
                 const link = document.createElement('a');
-                link.href = blobUrl;
+                link.href = fileToDownload;
                 link.download = fileToDownload;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-                
+
             }, 400);
         }
 
