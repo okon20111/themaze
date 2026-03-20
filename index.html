@@ -45,6 +45,8 @@
             z-index: 0;
             pointer-events: none;
             opacity: 0.7;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
             animation: floatOrb 20s infinite ease-in-out alternate;
         }
         .orb-1 { top: -10%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #fff200, transparent 70%); }
@@ -52,8 +54,8 @@
         .orb-3 { top: 40%; left: 30%; width: 45vw; height: 45vw; background: radial-gradient(circle, #1dd1a1, transparent 70%); animation-duration: 25s; }
 
         @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5%, 10%) scale(1.1); }
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(5%, 10%, 0) scale(1.1); }
         }
 
         /* --- INITIAL LOADER (DOPRACOWANY) --- */
@@ -117,6 +119,7 @@
             font-size: 1.8rem;
             background: linear-gradient(90deg, #05c46b, #1dd1a1);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
             animation: pulseText 2s infinite alternate;
@@ -171,7 +174,8 @@
                 transparent 10deg,
                 transparent 20deg
             );
-            transform: translate(-50%, 0);
+            transform: translate3d(-50%, 0, 0);
+            will-change: transform;
             animation: rotateRays 120s linear infinite;
             pointer-events: none;
             z-index: 0;
@@ -180,8 +184,8 @@
         }
 
         @keyframes rotateRays {
-            from { transform: translate(-50%, 0) rotate(0deg); }
-            to { transform: translate(-50%, 0) rotate(360deg); }
+            from { transform: translate3d(-50%, 0, 0) rotate(0deg); }
+            to { transform: translate3d(-50%, 0, 0) rotate(360deg); }
         }
 
         /* --- TYPOGRAFIA --- */
@@ -204,8 +208,8 @@
         .delay-400 { animation-delay: 0.4s; }
 
         @keyframes bounceIn {
-            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+            0% { opacity: 0; transform: translate3d(0, 30px, 0) scale(0.95); }
+            100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
         }
 
         .title-happy {
@@ -213,6 +217,7 @@
             background: linear-gradient(to right, #05c46b, #1dd1a1, #ff9ff3, #feca57, #05c46b);
             background-size: 200% auto;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: 
                 drop-shadow(0 15px 25px rgba(5, 196, 107, 0.4)) 
@@ -220,6 +225,7 @@
                 drop-shadow(0 -1px 2px rgba(255, 255, 255, 0.8));
             letter-spacing: -0.05em;
             line-height: 1.1;
+            will-change: background-position;
             animation: shineGradient 6s linear infinite;
         }
 
@@ -268,7 +274,7 @@
             position: relative;
             overflow: hidden;
             transform: translate3d(0,0,0);
-            transition: all 0.4s ease;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         .btn-inner::after {
@@ -356,7 +362,7 @@
         .modal-overlay {
             opacity: 0;
             pointer-events: none;
-            transition: all 0.5s ease;
+            transition: opacity 0.5s ease, background 0.5s ease, backdrop-filter 0.5s ease;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(0px);
         }
@@ -370,7 +376,7 @@
         .modal-window {
             transform: scale(0.8) translateY(50px);
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid #fff;
@@ -447,7 +453,7 @@
             position: relative;
             overflow: hidden;
             transform: translate3d(0,0,0);
-            transition: all 0.4s ease;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         /* Szklany połysk przelatujący przez przycisk na hover */
@@ -480,6 +486,23 @@
         }
         .btn-container-archive:hover .icon-bounce-archive {
             transform: scale(1.15) rotate(10deg);
+        }
+
+        /* --- MOTYW LATA (.theme-summer on body) --- */
+        body.theme-summer {
+            background: linear-gradient(180deg, #74b9ff 0%, #81ecec 35%, #55efc4 70%, #badc58 100%);
+        }
+        body.theme-summer .orb-1 {
+            background: radial-gradient(circle, #ffeaa7, transparent 70%);
+        }
+        body.theme-summer .orb-2 {
+            background: radial-gradient(circle, #ff9ff3, transparent 70%);
+        }
+        body.theme-summer .orb-3 {
+            background: radial-gradient(circle, #feca57, transparent 70%);
+        }
+        body.theme-summer #cursor-glow {
+            background: radial-gradient(circle, rgba(255, 234, 167, 0.4) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
         }
 
     </style>
@@ -531,7 +554,7 @@
         <div class="relative mb-8 mt-10 animate-enter">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/50 blur-[60px] rounded-full pointer-events-none"></div>
             
-            <h2 class="subtitle-hand mb-2">Prawdziwa Wiosna!</h2>
+            <h2 id="season-subtitle" class="subtitle-hand mb-2 transition-colors duration-500">Prawdziwa Wiosna!</h2>
             <h1 id="btn-text" class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
             
             <!-- Dynamiczna Plakietka Wersji -->
@@ -742,6 +765,7 @@
         const btnSubtext = document.getElementById('btn-subtext');
         const sizeText = document.getElementById('size-text');
         const dynamicTexts = document.querySelectorAll('.dynamic-text');
+        const seasonSubtitle = document.getElementById('season-subtitle');
 
         function renderDynamicIcon(target, iconName, className, id = null) {
             const iconDefinition = lucide.icons && lucide.icons[iconName];
@@ -764,12 +788,28 @@
                 tabStable.classList.remove('hover:text-gray-800');
                 tabBeta.classList.replace('text-emerald-600', 'text-gray-500');
                 tabBeta.classList.add('hover:text-gray-800');
+
+                document.body.classList.remove('theme-summer');
+                if (seasonSubtitle) {
+                    seasonSubtitle.innerText = 'Prawdziwa Wiosna!';
+                    seasonSubtitle.style.color = '#ff9ff3'; // Spring color
+                }
             } else {
                 slider.style.transform = 'translateX(100%)';
                 tabBeta.classList.replace('text-gray-500', 'text-emerald-600');
                 tabBeta.classList.remove('hover:text-gray-800');
                 tabStable.classList.replace('text-emerald-600', 'text-gray-500');
                 tabStable.classList.add('hover:text-gray-800');
+
+                document.body.classList.add('theme-summer');
+                if (seasonSubtitle) {
+                    seasonSubtitle.innerText = 'Gorące Lato!';
+                    seasonSubtitle.style.color = '#e17055'; // Summer color
+                }
+            }
+            
+            if (typeof initParticles === 'function') {
+                initParticles();
             }
 
             dynamicTexts.forEach(el => el.classList.add('fade-out-text'));
@@ -1026,6 +1066,9 @@
         const TWO_PI = Math.PI * 2;
         const PINK_COLORS = ['#ff9ff3', '#f8a5c2', '#ffcccc', '#ffb8b8'];
         const GREEN_COLORS = ['#1dd1a1', '#05c46b', '#badc58', '#b8e994'];
+        const SUMMER_HOT_COLORS = ['#ff9ff3', '#feca57', '#ff9f43', '#ffb8b8'];
+        const SUMMER_SKY_COLORS = ['#1dd1a1', '#55efc4', '#00b894', '#ffeaa7'];
+        const particleSpriteCache = new Map();
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -1040,6 +1083,44 @@
             });
         }
 
+        function getParticleSprite(type, size, color) {
+            const normalizedSize = Math.round(size * 10) / 10;
+            const cacheKey = `${type}:${color}:${normalizedSize}`;
+            const cachedSprite = particleSpriteCache.get(cacheKey);
+            if (cachedSprite) return cachedSprite;
+
+            const padding = type === 'pollen' ? normalizedSize * 3 : normalizedSize * 2.5;
+            const spriteSize = Math.max(16, Math.ceil(padding * 2));
+            const spriteCanvas = document.createElement('canvas');
+            spriteCanvas.width = spriteSize;
+            spriteCanvas.height = spriteSize;
+
+            const spriteCtx = spriteCanvas.getContext('2d');
+            const center = spriteSize / 2;
+            spriteCtx.translate(center, center);
+            spriteCtx.beginPath();
+
+            if (type === 'petal' || type === 'leaf') {
+                spriteCtx.moveTo(0, -normalizedSize);
+                spriteCtx.bezierCurveTo(normalizedSize, -normalizedSize, normalizedSize * 1.5, 0, 0, normalizedSize * 1.5);
+                spriteCtx.bezierCurveTo(-normalizedSize * 1.5, 0, -normalizedSize, -normalizedSize, 0, -normalizedSize);
+                spriteCtx.fillStyle = color;
+                spriteCtx.fill();
+            } else {
+                const gradient = spriteCtx.createRadialGradient(0, 0, 0, 0, 0, normalizedSize);
+                gradient.addColorStop(0, '#ffffff');
+                gradient.addColorStop(0.4, color);
+                gradient.addColorStop(1, 'transparent');
+                spriteCtx.fillStyle = gradient;
+                spriteCtx.arc(0, 0, normalizedSize, 0, TWO_PI);
+                spriteCtx.fill();
+            }
+
+            const sprite = { canvas: spriteCanvas, halfSize: center };
+            particleSpriteCache.set(cacheKey, sprite);
+            return sprite;
+        }
+
         class Particle {
             constructor() { this.init(); }
             init() {
@@ -1047,19 +1128,23 @@
                 this.y = Math.random() * height - height;
                 
                 const rand = Math.random();
+                let isSummer = typeof currentVersion !== 'undefined' && currentVersion === 'beta';
+                let colors1 = isSummer ? SUMMER_HOT_COLORS : PINK_COLORS;
+                let colors2 = isSummer ? SUMMER_SKY_COLORS : GREEN_COLORS;
+
                 if (rand < 0.4) {
                     this.type = 'petal';
-                    this.color = PINK_COLORS[Math.floor(Math.random() * PINK_COLORS.length)];
+                    this.color = colors1[Math.floor(Math.random() * colors1.length)];
                     this.size = Math.random() * 5 + 3;
                     this.speedY = Math.random() * 1 + 0.5;
                 } else if (rand < 0.8) {
                     this.type = 'leaf';
-                    this.color = GREEN_COLORS[Math.floor(Math.random() * GREEN_COLORS.length)];
+                    this.color = colors2[Math.floor(Math.random() * colors2.length)];
                     this.size = Math.random() * 4 + 2;
                     this.speedY = Math.random() * 1.5 + 0.8;
                 } else {
                     this.type = 'pollen';
-                    this.color = '#feca57';
+                    this.color = isSummer ? '#ff9f43' : '#feca57';
                     this.size = Math.random() * 2 + 1;
                     this.speedY = Math.random() * 0.5 + 0.2;
                 }
@@ -1070,6 +1155,9 @@
                 this.opacity = Math.random() * 0.6 + 0.4;
                 this.swing = Math.random() * Math.PI * 2;
                 this.swingSpeed = Math.random() * 0.05 + 0.01;
+                const sprite = getParticleSprite(this.type, this.size, this.color);
+                this.sprite = sprite.canvas;
+                this.spriteHalfSize = sprite.halfSize;
             }
             update() {
                 this.swing += this.swingSpeed;
@@ -1092,23 +1180,7 @@
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.rotation * Math.PI / 180);
                 ctx.globalAlpha = this.opacity;
-                ctx.beginPath();
-                
-                if (this.type === 'petal' || this.type === 'leaf') {
-                    ctx.moveTo(0, -this.size);
-                    ctx.bezierCurveTo(this.size, -this.size, this.size*1.5, 0, 0, this.size*1.5);
-                    ctx.bezierCurveTo(-this.size*1.5, 0, -this.size, -this.size, 0, -this.size);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                } else {
-                    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
-                    gradient.addColorStop(0, '#ffffff');
-                    gradient.addColorStop(0.4, this.color);
-                    gradient.addColorStop(1, 'transparent');
-                    ctx.fillStyle = gradient;
-                    ctx.arc(0, 0, this.size, 0, TWO_PI);
-                    ctx.fill();
-                }
+                ctx.drawImage(this.sprite, -this.spriteHalfSize, -this.spriteHalfSize);
                 ctx.restore();
             }
         }
