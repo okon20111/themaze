@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Maze - Wersja 1.5</title>
+    <title>The Maze - Wersja 2.0</title>
     
     <!-- Preconnect dla szybszego wczytywania fontów (poprawa LCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,7 +77,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(29, 209, 161, 0.1) 0%, transparent 60%);
+            background: radial-gradient(circle at center, rgba(254, 202, 87, 0.16) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -102,9 +102,9 @@
         .loader-ring {
             position: absolute;
             inset: 0;
-            border: 3px solid rgba(5, 196, 107, 0.1);
-            border-top-color: #05c46b;
-            border-right-color: #1dd1a1;
+            border: 3px solid rgba(255, 159, 67, 0.12);
+            border-top-color: #ff9f43;
+            border-right-color: #feca57;
             border-radius: 50%;
             animation: spinRing 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
@@ -117,7 +117,7 @@
         .loader-text {
             font-family: 'Kaushan Script', cursive;
             font-size: 1.8rem;
-            background: linear-gradient(90deg, #05c46b, #1dd1a1);
+            background: linear-gradient(90deg, #ff9f43, #feca57);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -142,7 +142,7 @@
         .loader-progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #05c46b, #1dd1a1);
+            background: linear-gradient(90deg, #ff9f43, #feca57);
             border-radius: 4px;
             transition: width 0.1s ease-out;
         }
@@ -308,38 +308,8 @@
             transform: scale(1.2) rotate(15deg);
         }
 
-        /* --- ZAKŁADKI (TABS) --- */
-        .tab-slider {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .glass-tab-container {
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-        }
-
-        .glass-slider {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
-            box-shadow: 0 8px 25px rgba(5, 196, 107, 0.2), 
-                        inset 0 2px 5px rgba(255, 255, 255, 0.9), 
-                        inset 0 -2px 5px rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-bottom-color: rgba(255, 255, 255, 0.3);
-            border-right-color: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(16px) saturate(150%);
-            -webkit-backdrop-filter: blur(16px) saturate(150%);
-        }
-        
         .dynamic-text {
             transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        
-        .fade-out-text {
-            opacity: 0;
-            transform: scale(0.98);
         }
 
         /* --- INFO PILL --- */
@@ -433,16 +403,16 @@
         /* --- PŁYWAJĄCY PRZYCISK SZKLANY (ZAWSZE WIDOCZNY W ROGU) --- */
         .btn-container-archive {
             border-radius: 50px;
-            box-shadow: 0 15px 35px -5px rgba(5, 196, 107, 0.2); 
+            box-shadow: 0 15px 35px -8px rgba(255, 159, 67, 0.28), 0 8px 20px -14px rgba(85, 239, 196, 0.3);
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
         }
 
         .btn-inner-archive {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-bottom-color: rgba(255, 255, 255, 0.3);
-            border-right-color: rgba(255, 255, 255, 0.3);
-            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.9), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 251, 245, 0.72) 0%, rgba(255, 255, 255, 0.22) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(255, 214, 153, 0.35);
+            border-right-color: rgba(255, 214, 153, 0.35);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.92), inset 0 -2px 5px rgba(255, 255, 255, 0.22);
             border-radius: 50px;
             padding: 8px 18px 8px 8px; /* asymetryczny padding ze względu na okrągłą ikonkę z lewej */
             display: flex;
@@ -468,12 +438,12 @@
 
         .btn-container-archive:hover {
             transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 20px 40px -8px rgba(5, 196, 107, 0.3);
+            box-shadow: 0 22px 44px -12px rgba(255, 159, 67, 0.38), 0 10px 20px -16px rgba(85, 239, 196, 0.35);
         }
         
         .btn-container-archive:hover .btn-inner-archive {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
-            border-color: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, rgba(255, 248, 238, 0.8) 0%, rgba(255, 255, 255, 0.28) 100%);
+            border-color: rgba(255, 255, 255, 0.92);
             box-shadow: inset 0 2px 8px rgba(255, 255, 255, 1), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
         }
 
@@ -486,6 +456,90 @@
         }
         .btn-container-archive:hover .icon-bounce-archive {
             transform: scale(1.15) rotate(10deg);
+        }
+
+        .archive-modal-window {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 248, 239, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.92);
+            box-shadow: 0 35px 60px -24px rgba(255, 159, 67, 0.3), 0 18px 35px -24px rgba(0, 184, 148, 0.22);
+        }
+
+        .archive-modal-window::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top right, rgba(254, 202, 87, 0.18) 0%, transparent 35%),
+                radial-gradient(circle at bottom left, rgba(85, 239, 196, 0.14) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .archive-header-icon {
+            background: linear-gradient(135deg, rgba(255, 243, 205, 0.92) 0%, rgba(255, 255, 255, 0.72) 100%);
+            color: #ff9f43;
+            border: 1px solid rgba(254, 202, 87, 0.45);
+            box-shadow: 0 10px 24px -18px rgba(255, 159, 67, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .archive-close-btn {
+            transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+
+        .archive-close-btn:hover {
+            background: rgba(255, 159, 67, 0.12);
+            color: #ff9f43;
+            transform: rotate(90deg);
+        }
+
+        .archive-entry {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 248, 239, 0.84) 100%);
+            border: 1px solid rgba(255, 224, 178, 0.65);
+            box-shadow: 0 12px 24px -18px rgba(255, 159, 67, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .archive-entry:hover {
+            transform: translateY(-2px) scale(1.01);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 247, 229, 0.94) 100%);
+            border-color: rgba(255, 159, 67, 0.45);
+            box-shadow: 0 18px 30px -16px rgba(255, 159, 67, 0.38), 0 10px 20px -18px rgba(85, 239, 196, 0.45);
+        }
+
+        .archive-entry-icon {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 239, 0.82) 100%);
+            border: 1px solid rgba(255, 224, 178, 0.52);
+            color: #94a3b8;
+            box-shadow: 0 8px 18px -16px rgba(255, 159, 67, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .archive-entry:hover .archive-entry-icon {
+            color: #ff9f43;
+            border-color: rgba(255, 159, 67, 0.38);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px -16px rgba(255, 159, 67, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+
+        .archive-entry-download {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 239, 0.82) 100%);
+            border: 1px solid rgba(255, 224, 178, 0.52);
+            color: #9ca3af;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .archive-entry:hover .archive-entry-download {
+            background: linear-gradient(180deg, rgba(255, 248, 232, 0.98) 0%, rgba(255, 238, 194, 0.95) 100%);
+            border-color: rgba(255, 159, 67, 0.36);
+            color: #ff9f43;
+            transform: scale(1.08);
+            box-shadow: 0 12px 20px -16px rgba(255, 159, 67, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+
+        .archive-file-name {
+            color: #7c8798;
+            letter-spacing: 0.18em;
         }
 
         /* --- MOTYW LATA (.theme-summer on body) --- */
@@ -504,19 +558,23 @@
         body.theme-summer #cursor-glow {
             background: radial-gradient(circle, rgba(255, 234, 167, 0.4) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
         }
+        body.theme-summer .subtitle-hand {
+            color: #e17055;
+            text-shadow: 2px 2px 0px rgba(255,255,255,1), 0 5px 15px rgba(225, 112, 85, 0.45);
+        }
 
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col items-center justify-center">
+<body class="theme-summer h-screen w-screen flex flex-col items-center justify-center">
 
     <!-- INITIAL LOADER SCREEN (PŁYNNY POSTĘP) -->
     <div id="initial-loader">
         <div class="loader-icon-wrapper relative z-10">
             <div class="loader-ring"></div>
-            <!-- Wewnętrzna kręcąca się roślinka -->
-            <i data-lucide="flower-2" class="w-10 h-10 text-emerald-500 animate-spin-slow"></i>
+            <!-- Wewnętrzne kręcące się słońce -->
+            <i data-lucide="sun" class="w-10 h-10 text-orange-500 animate-spin-slow"></i>
         </div>
-        <div class="loader-text relative z-10">Wiosna budzi się do życia...</div>
+        <div class="loader-text relative z-10">Lato rozgrzewa The Maze...</div>
         
         <!-- Pasek i procenty -->
         <div class="flex flex-col items-center mt-4 relative z-10">
@@ -541,7 +599,7 @@
         <div class="btn-inner-archive">
             <!-- Dodatkowa szklana obwódka dla samej ikony (jak w głównym przycisku) -->
             <div class="w-10 h-10 bg-white/40 backdrop-blur-md border border-white/60 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)] rounded-full flex items-center justify-center shrink-0 icon-bounce-archive">
-                <i data-lucide="archive" class="w-5 h-5 text-emerald-600 drop-shadow-md"></i>
+                <i data-lucide="archive" class="w-5 h-5 text-orange-500 drop-shadow-md"></i>
             </div>
             <span class="text-xs font-black text-gray-800 uppercase tracking-widest drop-shadow-sm pr-2">Archiwum</span>
         </div>
@@ -554,28 +612,16 @@
         <div class="relative mb-8 mt-10 animate-enter">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/50 blur-[60px] rounded-full pointer-events-none"></div>
             
-            <h2 id="season-subtitle" class="subtitle-hand mb-2 transition-colors duration-500">Prawdziwa Wiosna!</h2>
+            <h2 id="season-subtitle" class="subtitle-hand mb-2">Gorące Lato!</h2>
             <h1 id="btn-text" class="title-happy text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">THE MAZE</h1>
             
             <!-- Dynamiczna Plakietka Wersji -->
             <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 border border-white/50 shadow-[0_8px_32px_rgba(255,255,255,0.2),inset_0_2px_5px_rgba(255,255,255,0.8)] backdrop-blur-xl dynamic-text w-[240px] justify-center">
                 <div id="version-icon-wrapper" class="w-5 h-5 flex items-center justify-center shrink-0">
-                    <i id="version-icon" data-lucide="flower-2" class="w-4 h-4 text-pink-500 animate-spin-slow"></i>
+                    <i id="version-icon" data-lucide="sparkles" class="w-4 h-4 text-orange-500 animate-pulse"></i>
                 </div>
-                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-700 drop-shadow-sm whitespace-nowrap">Wersja 1.5</span>
+                <span id="version-badge" class="text-sm font-bold uppercase tracking-widest text-gray-700 drop-shadow-sm whitespace-nowrap">Wersja 2.0</span>
             </div>
-        </div>
-
-        <!-- System Zakładek (Tabs) -->
-        <div class="glass-tab-container p-1.5 rounded-full flex items-center relative z-20 mb-8 animate-enter delay-100">
-            <div id="tab-slider" class="tab-slider glass-slider absolute left-1.5 top-1.5 bottom-1.5 w-[calc(50%-0.375rem)] rounded-full pointer-events-none"></div>
-            
-            <button onclick="switchTab('stable')" id="tab-btn-stable" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-emerald-600 transition-colors duration-300">
-                Stabilna
-            </button>
-            <button onclick="switchTab('beta')" id="tab-btn-beta" class="relative z-10 w-36 py-2.5 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-800 transition-colors duration-300">
-                Beta
-            </button>
         </div>
 
         <!-- Sekcja Przycisku -->
@@ -601,7 +647,7 @@
             <!-- Rozmiar -->
             <div class="info-pill animate-enter delay-300 dynamic-text w-[200px] justify-center" id="size-wrapper">
                 <i data-lucide="cloud-download" class="w-4 h-4 text-emerald-500 shrink-0"></i>
-                <span class="uppercase font-bold text-gray-600 whitespace-nowrap">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">55.2 MB</span></span>
+                <span class="uppercase font-bold text-gray-600 whitespace-nowrap">Rozmiar: <span id="size-text" class="text-emerald-600 font-black ml-1">54.9 MB</span></span>
             </div>
 
         </div>
@@ -658,82 +704,83 @@
 
     <!-- Modal Archiwum -->
     <div id="archiveModalOverlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-window p-6 relative w-full max-w-[480px]">
-            <div class="absolute -top-20 -left-20 w-40 h-40 bg-pink-200/40 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="modal-window archive-modal-window p-6 relative w-full max-w-[480px]">
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-orange-200/40 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -right-16 w-40 h-40 bg-teal-200/30 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="flex justify-between items-center mb-6 relative z-10">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 border border-emerald-100/50 shadow-sm">
+                    <div class="archive-header-icon w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
                         <i data-lucide="archive" class="w-5 h-5"></i>
                     </div>
                     <h3 class="text-xl font-black text-gray-800 tracking-tight font-outfit uppercase">Archiwum wersji</h3>
                 </div>
-                <button onclick="closeArchiveModal()" class="p-2 hover:bg-gray-100 rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+                <button onclick="closeArchiveModal()" class="archive-close-btn p-2 rounded-full text-gray-400"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
 
             <!-- Lista plików w archiwum bez scrollbara wizualnego -->
             <div class="flex flex-col gap-3 max-h-[50vh] overflow-y-auto no-scrollbar relative z-10 pb-2">
                 
                 <!-- Wersja 1.0 -->
-                <button onclick="downloadFromArchive('themaze1_0_archive.zip', 'Archiwum - Wersja 1.0')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                <button onclick="downloadFromArchive('themaze1_0_archive.zip', 'Archiwum - Wersja 1.0')" class="archive-entry flex items-center justify-between p-4 rounded-2xl group w-full text-left">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                        <div class="archive-entry-icon w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
                             <i data-lucide="history" class="w-5 h-5"></i>
                         </div>
                         <div>
                             <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.0</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_0_archive.zip</div>
+                            <div class="archive-file-name text-[10px] uppercase font-bold">themaze1_0_archive.zip</div>
                         </div>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                    <div class="archive-entry-download w-8 h-8 rounded-full flex items-center justify-center">
                         <i data-lucide="download" class="w-4 h-4"></i>
                     </div>
                 </button>
 
                 <!-- Wersja 1.1 -->
-                <button onclick="downloadFromArchive('themaze1_1_archive.zip', 'Archiwum - Wersja 1.1')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                <button onclick="downloadFromArchive('themaze1_1_archive.zip', 'Archiwum - Wersja 1.1')" class="archive-entry flex items-center justify-between p-4 rounded-2xl group w-full text-left">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                        <div class="archive-entry-icon w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
                             <i data-lucide="history" class="w-5 h-5"></i>
                         </div>
                         <div>
                             <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.1</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_1_archive.zip</div>
+                            <div class="archive-file-name text-[10px] uppercase font-bold">themaze1_1_archive.zip</div>
                         </div>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                    <div class="archive-entry-download w-8 h-8 rounded-full flex items-center justify-center">
                         <i data-lucide="download" class="w-4 h-4"></i>
                     </div>
                 </button>
 
                 <!-- Wersja 1.2 -->
-                <button onclick="downloadFromArchive('themaze1_2_archive.zip', 'Archiwum - Wersja 1.2')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                <button onclick="downloadFromArchive('themaze1_2_archive.zip', 'Archiwum - Wersja 1.2')" class="archive-entry flex items-center justify-between p-4 rounded-2xl group w-full text-left">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                        <div class="archive-entry-icon w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
                             <i data-lucide="history" class="w-5 h-5"></i>
                         </div>
                         <div>
                             <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.2</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_2_archive.zip</div>
+                            <div class="archive-file-name text-[10px] uppercase font-bold">themaze1_2_archive.zip</div>
                         </div>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                    <div class="archive-entry-download w-8 h-8 rounded-full flex items-center justify-center">
                         <i data-lucide="download" class="w-4 h-4"></i>
                     </div>
                 </button>
 
                 <!-- Wersja 1.5 -->
-                <button onclick="downloadFromArchive('themaze1_5_archive.zip', 'Archiwum - Wersja 1.5')" class="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-white border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-md transition-all group w-full text-left">
+                <button onclick="downloadFromArchive('themaze1_5_archive.zip', 'Archiwum - Wersja 1.5')" class="archive-entry flex items-center justify-between p-4 rounded-2xl group w-full text-left">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors shrink-0">
+                        <div class="archive-entry-icon w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
                             <i data-lucide="history" class="w-5 h-5"></i>
                         </div>
                         <div>
                             <div class="text-sm font-black text-gray-800 mb-0.5">Wersja 1.5</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">themaze1_5_archive.zip</div>
+                            <div class="archive-file-name text-[10px] uppercase font-bold">themaze1_5_archive.zip</div>
                         </div>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-white border border-gray-100 text-gray-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 group-hover:text-emerald-600 group-hover:scale-110 transition-all">
+                    <div class="archive-entry-download w-8 h-8 rounded-full flex items-center justify-center">
                         <i data-lucide="download" class="w-4 h-4"></i>
                     </div>
                 </button>
@@ -743,45 +790,12 @@
     </div>
 
     <script>
-        const gameVersions = {
-            stable: {
-                badge: 'Wersja 1.5',
-                badgeColor: 'text-pink-500',
-                icon: 'flower-2',
-                iconClass: 'animate-spin-slow',
-                btnMain: 'POBIERZ TERAZ',
-                btnSub: 'Dostępne wyłącznie na Windows 11',
-                size: '55.2 MB',
-                file: 'themaze.zip',
-                modalDesc: 'Oficjalny pakiet instalacyjny'
-            },
-            beta: {
-                badge: 'The Maze v2.0 Beta 6',
-                badgeColor: 'text-indigo-500',
-                icon: 'sparkles',
-                iconClass: 'animate-pulse',
-                btnMain: 'POBIERZ BETĘ',
-                btnSub: 'Wersja testowa / Early Access',
-                size: '90.4 MB',
-                file: 'themazebeta.zip',
-                modalDesc: 'Eksperymentalny pakiet testowy'
-            }
+        const currentRelease = {
+            file: 'themaze.zip',
+            modalDesc: 'Oficjalny pakiet instalacyjny'
         };
 
-        let currentVersion = 'stable';
         let currentDownloadTarget = null; // Trzyma informacje o obecnie wybranym pliku
-        let tabSwitchTimeout = null;
-
-        const slider = document.getElementById('tab-slider');
-        const tabStable = document.getElementById('tab-btn-stable');
-        const tabBeta = document.getElementById('tab-btn-beta');
-        const versionBadge = document.getElementById('version-badge');
-        const versionIconWrapper = document.getElementById('version-icon-wrapper');
-        const btnTitleText = document.getElementById('btn-title-text');
-        const btnSubtext = document.getElementById('btn-subtext');
-        const sizeText = document.getElementById('size-text');
-        const dynamicTexts = document.querySelectorAll('.dynamic-text');
-        const seasonSubtitle = document.getElementById('season-subtitle');
 
         function renderDynamicIcon(target, iconName, className, id = null) {
             const iconDefinition = lucide.icons && lucide.icons[iconName];
@@ -792,71 +806,6 @@
 
             target.innerHTML = iconDefinition.toSvg(attrs);
             return true;
-        }
-
-        function switchTab(ver) {
-            if (currentVersion === ver) return;
-            currentVersion = ver;
-
-            if (ver === 'stable') {
-                slider.style.transform = 'translateX(0)';
-                tabStable.classList.replace('text-gray-500', 'text-emerald-600');
-                tabStable.classList.remove('hover:text-gray-800');
-                tabBeta.classList.replace('text-emerald-600', 'text-gray-500');
-                tabBeta.classList.add('hover:text-gray-800');
-
-                document.body.classList.remove('theme-summer');
-                if (seasonSubtitle) {
-                    seasonSubtitle.innerText = 'Prawdziwa Wiosna!';
-                    seasonSubtitle.style.color = '#ff9ff3'; // Spring color
-                }
-            } else {
-                slider.style.transform = 'translateX(100%)';
-                tabBeta.classList.replace('text-gray-500', 'text-emerald-600');
-                tabBeta.classList.remove('hover:text-gray-800');
-                tabStable.classList.replace('text-emerald-600', 'text-gray-500');
-                tabStable.classList.add('hover:text-gray-800');
-
-                document.body.classList.add('theme-summer');
-                if (seasonSubtitle) {
-                    seasonSubtitle.innerText = 'Gorące Lato!';
-                    seasonSubtitle.style.color = '#e17055'; // Summer color
-                }
-            }
-            
-            if (typeof initParticles === 'function') {
-                initParticles();
-            }
-
-            dynamicTexts.forEach(el => el.classList.add('fade-out-text'));
-
-            if (tabSwitchTimeout !== null) {
-                clearTimeout(tabSwitchTimeout);
-            }
-
-            tabSwitchTimeout = setTimeout(() => {
-                const data = gameVersions[ver];
-                
-                versionBadge.innerText = data.badge;
-                
-                const versionIconRendered = renderDynamicIcon(
-                    versionIconWrapper,
-                    data.icon,
-                    `w-4 h-4 ${data.badgeColor} ${data.iconClass}`,
-                    'version-icon'
-                );
-                if (!versionIconRendered) {
-                    versionIconWrapper.innerHTML = `<i id="version-icon" data-lucide="${data.icon}" class="w-4 h-4 ${data.badgeColor} ${data.iconClass}"></i>`;
-                    lucide.createIcons();
-                }
-
-                btnTitleText.innerText = data.btnMain;
-                btnSubtext.innerText = data.btnSub;
-                sizeText.innerText = data.size;
-
-                dynamicTexts.forEach(el => el.classList.remove('fade-out-text'));
-                tabSwitchTimeout = null;
-            }, 300);
         }
 
         /* --- OBSŁUGA LOADERA WEJŚCIOWEGO --- */
@@ -976,7 +925,7 @@
             downloadInterval = null;
         }
 
-        // openDownloadModal przyjmuje teraz opcjonalne parametry. Jeśli ich nie ma, bierze stabilną/betę.
+        // openDownloadModal przyjmuje opcjonalne parametry dla archiwum.
         function openDownloadModal(customFile = null, customDesc = null) {
             if (isDownloading) return;
             isDownloading = true;
@@ -992,10 +941,9 @@
                     lucide.createIcons();
                 }
             } else {
-                const data = gameVersions[currentVersion];
-                currentDownloadTarget = { file: data.file, desc: data.modalDesc };
-                document.getElementById('modal-filename').innerText = data.file;
-                document.getElementById('modal-filedesc').innerText = data.modalDesc;
+                currentDownloadTarget = { file: currentRelease.file, desc: currentRelease.modalDesc };
+                document.getElementById('modal-filename').innerText = currentRelease.file;
+                document.getElementById('modal-filedesc').innerText = currentRelease.modalDesc;
                 const packageIconRendered = renderDynamicIcon(modalIconWrapper, 'package', 'w-6 h-6', 'modal-icon');
                 if (!packageIconRendered) {
                     document.getElementById('modal-icon').setAttribute('data-lucide', 'package');
@@ -1080,8 +1028,6 @@
         let resizeFrame = null;
         const PARTICLE_COUNT = 70;
         const TWO_PI = Math.PI * 2;
-        const PINK_COLORS = ['#ff9ff3', '#f8a5c2', '#ffcccc', '#ffb8b8'];
-        const GREEN_COLORS = ['#1dd1a1', '#05c46b', '#badc58', '#b8e994'];
         const SUMMER_HOT_COLORS = ['#ff9ff3', '#feca57', '#ff9f43', '#ffb8b8'];
         const SUMMER_SKY_COLORS = ['#1dd1a1', '#55efc4', '#00b894', '#ffeaa7'];
         const particleSpriteCache = new Map();
@@ -1144,9 +1090,8 @@
                 this.y = Math.random() * height - height;
                 
                 const rand = Math.random();
-                let isSummer = typeof currentVersion !== 'undefined' && currentVersion === 'beta';
-                let colors1 = isSummer ? SUMMER_HOT_COLORS : PINK_COLORS;
-                let colors2 = isSummer ? SUMMER_SKY_COLORS : GREEN_COLORS;
+                const colors1 = SUMMER_HOT_COLORS;
+                const colors2 = SUMMER_SKY_COLORS;
 
                 if (rand < 0.4) {
                     this.type = 'petal';
@@ -1160,7 +1105,7 @@
                     this.speedY = Math.random() * 1.5 + 0.8;
                 } else {
                     this.type = 'pollen';
-                    this.color = isSummer ? '#ff9f43' : '#feca57';
+                    this.color = '#ff9f43';
                     this.size = Math.random() * 2 + 1;
                     this.speedY = Math.random() * 0.5 + 0.2;
                 }
