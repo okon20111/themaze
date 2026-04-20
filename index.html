@@ -188,23 +188,46 @@
 
         /* --- MODAL (Klasyczny czysty wygląd) --- */
         .modal-overlay {
+            --overlay-bg: rgba(15, 23, 42, 0.22);
+            --overlay-blur: blur(16px);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease, background 0.5s ease, backdrop-filter 0.5s ease;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(0px);
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+            isolation: isolate;
+            will-change: opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
+
+        .modal-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--overlay-bg);
+            backdrop-filter: var(--overlay-blur);
+            -webkit-backdrop-filter: var(--overlay-blur);
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            pointer-events: none;
+        }
+
         .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
-            background: rgba(15, 23, 42, 0.22);
-            backdrop-filter: blur(16px);
+            visibility: visible;
+            transition: opacity 0.35s ease;
         }
         
         .modal-window {
-            transform: scale(0.8) translateY(50px);
+            position: relative;
+            z-index: 1;
+            transform: translate3d(0, 50px, 0) scale(0.8);
             opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            contain: layout paint;
             
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid #fff;
@@ -342,9 +365,9 @@
             pointer-events: none;
         }
 
-        #archiveModalOverlay.active {
-            background: rgba(15, 23, 42, 0.34);
-            backdrop-filter: blur(22px) saturate(0.9);
+        #archiveModalOverlay {
+            --overlay-bg: rgba(15, 23, 42, 0.34);
+            --overlay-blur: blur(22px) saturate(0.9);
         }
 
         .archive-header-icon {
